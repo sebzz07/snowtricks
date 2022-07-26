@@ -2410,7 +2410,7 @@ class ScrollBarHelper {
     this._disableOverFlow(); // give padding to element to balance the hidden scrollbar width
 
 
-    this._setElementAttributes(this._element, 'paddingRight', calculatedValue => calculatedValue + width); // trick: We adjust positive paddingRight and negative marginRight to sticky-top elements to keep showing fullwidth
+    this._setElementAttributes(this._element, 'paddingRight', calculatedValue => calculatedValue + width); // trickView: We adjust positive paddingRight and negative marginRight to sticky-top elements to keep showing fullwidth
 
 
     this._setElementAttributes(SELECTOR_FIXED_CONTENT, 'paddingRight', calculatedValue => calculatedValue + width);
@@ -3708,7 +3708,7 @@ class Tooltip extends BaseComponent {
 
     if (showEvent.defaultPrevented || !isInTheDom) {
       return;
-    } // A trick to recreate a tooltip in case a new title is given by using the NOT documented `data-bs-original-title`
+    } // A trickView to recreate a tooltip in case a new title is given by using the NOT documented `data-bs-original-title`
     // This will be removed later in favor of a `setContent` method
 
 

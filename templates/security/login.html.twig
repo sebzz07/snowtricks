@@ -3,7 +3,6 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-    <div class="container my-4">
         <form method="post">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -48,5 +47,4 @@
             </button>
         </form>
         <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
-    </div>
 {% endblock %}
