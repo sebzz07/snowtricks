@@ -28,12 +28,12 @@ class Category
     private $categories;
 
     #[ORM\ManyToMany(targetEntity: Trick::class, mappedBy: 'Category')]
-    private $tricks;
+    private Trick $tricks;
 
     public function __construct()
     {
         $this->categories = new ArrayCollection();
-        $this->tricks = new ArrayCollection();
+
     }
 
     public function getId(): ?int

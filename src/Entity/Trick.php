@@ -5,7 +5,9 @@ namespace App\Entity;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\DateImmutableType;
 use Doctrine\ORM\Mapping as ORM;
+
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 class Trick
@@ -13,41 +15,43 @@ class Trick
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private $name;
+    private string $name;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private $slug;
+    private string $slug;
 
     #[ORM\Column(type: 'string', length: 9999)]
-    private $description;
+    private string $description;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist'])]
-    private $picture;
+
+    private Collection $picture;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'])]
-    private $video;
+
+    private Collection $video;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
-    private $user;
+    private User $user;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $publicationStatusTrick;
+    private string $publicationStatusTrick;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Post::class)]
-    private $posts;
+    private Collection $posts;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'tricks')]
     private $Category;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $created_at;
+    private \DateTimeImmutable $created_at;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $modified_at;
+    private \DateTimeImmutable $modified_at;
 
     public function __construct()
     {
@@ -55,8 +59,11 @@ class Trick
         $this->modified_at = new \DateTimeImmutable();
         $this->picture = new ArrayCollection();
         $this->video = new ArrayCollection();
-        $this->posts = new ArrayCollection();
-        $this->Category = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -184,9 +191,6 @@ class Trick
         return $this;
     }
 
-    /**
-     * @return Collection<int, Post>
-     */
     public function getPosts(): Collection
     {
         return $this->posts;
@@ -215,9 +219,9 @@ class Trick
     }
 
     /**
-     * @return Collection<int, Category>
+     * @return Category
      */
-    public function getCategory(): Collection
+    public function getCategory(): Category
     {
         return $this->Category;
     }

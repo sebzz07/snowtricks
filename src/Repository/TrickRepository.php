@@ -39,6 +39,19 @@ class TrickRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getAllTricks():array
+    {
+        return $this->createQueryBuilder("t")
+            ->addSelect("p")
+            ->join("t.posts","p")
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 //    /**
 //     * @return Trick[] Returns an array of Trick objects
 //     */

@@ -33,12 +33,12 @@
                                     <p><a href="#" class="btn btn-info">#tag</a></p>
                                     <p>Created at {{ trick.createdAt|date("m/d/Y") }} </p><br>
                                     <p> Updated at {{ trick.modifiedAt|date("m/d/Y") }}</p>
+                                    <p>{{ trick.posts|length }} comment(s) </p><br>
                                 </div>
                             </div>
                             <!-- Trick actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ path('app_trick_show', { 'id': trick.slug }) }}">More
-                                        information...</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ path('app_trick', { 'slug': trick.slug }) }}">See this trick...</a></div>
                             </div>
                         </div>
 
