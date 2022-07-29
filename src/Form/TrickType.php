@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Trick;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,10 +18,7 @@ class TrickType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('publicationStatusTrick')
-            ->add('created_at')
-            ->add('modified_at')
-            ->add('user')
-            ->add('Category')
+          /*  ->add('Category')
             ->add('picture', FileType::class, [
                 'label' => "Add Pictures :",
                 'multiple' => true,
@@ -35,8 +33,12 @@ class TrickType extends AbstractType
                         'mimeTypesMessage' => 'Please upload a valid jpeg image',
                     ])
                 ],
-            ])
-            ->add('video')
+            ])*/
+            ->add('video',CollectionType::class,[
+              'entry_type' => VideoType::class,
+              'allow_add' => true,
+              'allow_delete'=> true
+          ])
         ;
     }
 

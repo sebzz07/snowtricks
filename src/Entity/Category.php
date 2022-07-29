@@ -13,7 +13,7 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 100)]
     private $name;
@@ -28,7 +28,7 @@ class Category
     private $categories;
 
     #[ORM\ManyToMany(targetEntity: Trick::class, mappedBy: 'Category')]
-    private Trick $tricks;
+    private Collection $tricks;
 
     public function __construct()
     {
