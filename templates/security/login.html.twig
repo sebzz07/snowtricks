@@ -14,7 +14,7 @@
                 </div>
             {% endif %}
 
-            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+            <h1 class="h3 mb-3 font-weight-normal">Please login</h1>
 
             {% for flash_successful in app.flashes('success') %}
                 <div class="alert alert-success" role="alert">{{ flash_successful }}</div>
@@ -43,7 +43,7 @@
 
 
             <button class="btn btn-lg btn-primary" type="submit">
-                Sign in
+                Login
             </button>
         </form>
         <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>

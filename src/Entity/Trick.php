@@ -45,7 +45,7 @@ class Trick
     private Collection $posts;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'tricks')]
-    private Collection $category;
+    private Collection $categories;
 
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -224,13 +224,13 @@ class Trick
      */
     public function getCategory(): Collection
     {
-        return $this->category;
+        return $this->categories;
     }
 
     public function addCategory(Category $category): self
     {
-        if (!$this->category->contains($category)) {
-            $this->category[] = $category;
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
         }
 
         return $this;
@@ -238,7 +238,7 @@ class Trick
 
     public function removeCategory(Category $category): self
     {
-        $this->category->removeElement($category);
+        $this->categories->removeElement($category);
 
         return $this;
     }

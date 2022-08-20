@@ -1,4 +1,11 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.picture) }}
+    <button class="btn btn-primary mt-auto" id="add-picture">Add Picture</button>
+    <br>
+    {{ form_row(form.video) }}
+    <button class="btn btn-primary mt-auto" id="add-video">Add Video</button>
+    <br>
     <button class="btn btn-primary mt-auto">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

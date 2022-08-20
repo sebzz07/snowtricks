@@ -3,18 +3,66 @@
 namespace App\Controller;
 
 use App\Entity\Picture;
+use App\Entity\Post;
 use App\Entity\Trick;
 use App\Entity\Video;
+use App\Form\PostType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/singletrick')]
+#[Route('/trick')]
 class TrickController extends AbstractController
 {
+
+    /**
+     * @param Trick $trick
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    #[Route('/{slug}', name: 'app_trick', methods: ['GET'])]
+    public function read(Trick $trick, Request $request, EntityManagerInterface $entityManager) :Response
+    {
+        $post = new Post();
+        $form = $this->createForm(PostType::class,$post)->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post->setUser($this->getUser())
+                ->setTrick($trick);
+            $entityManager->persist($post);
+            $entityManager->flush();
+            $this->addFlash('success', 'Your comment has been published.');
+            return $this->redirectToRoute('app_trick', ['slug' =>$trick->getSlug()]);
+        };
+
+
+        return $this->render('trick/trick.html.twig', [
+            'trick' => $trick,
+            'form' => $form->createView()
+        ]);
+    }
+    /**
+     * @param Trick $trick
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    #[Route('/{slug}/addpicture', name: 'app_addPicture')]
+    public function AddPicture() :Response
+    {
+
+        return $this->render('picture/addpicture.html.twig');
+    }
+
+    /**
+     * @param TrickRepository $trickRepository
+     * @return Response
+     */
     #[Route('/', name: 'app_trick_index', methods: ['GET'])]
     public function index(TrickRepository $trickRepository): Response
     {
@@ -59,15 +107,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_trick_show', methods: ['GET'])]
-    public function show(Trick $trick): Response
-    {
-        return $this->render('trick/show.html.twig', [
-            'trick' => $trick,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
+    #[Route('/{slug}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Trick $trick, TrickRepository $trickRepository): Response
     {
         $form = $this->createForm(TrickType::class, $trick);

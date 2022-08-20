@@ -29,44 +29,4 @@ class MainController extends AbstractController
         ]);
     }
 
-    /**
-     * @param Trick $trick
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @return Response
-     */
-    #[Route('/trick/{slug}', name: 'app_trick', methods: ['GET'])]
-    public function read(Trick $trick, Request $request, EntityManagerInterface $entityManager) :Response
-    {
-        $post = new Post();
-        $form = $this->createForm(PostType::class,$post)->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $post->setUser($this->getUser())
-                ->setTrick($trick);
-            $entityManager->persist($post);
-            $entityManager->flush();
-            $this->addFlash('success', 'Your comment has been published.');
-            return $this->redirectToRoute('app_trick', ['slug' =>$trick->getSlug()]);
-        };
-
-
-        return $this->render('main/trick.html.twig', [
-            'trick' => $trick,
-            'form' => $form->createView()
-        ]);
-    }
-
-    /**
-     * @param Trick $trick
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @return Response
-     */
-    #[Route('/trick/{slug}/addpicture', name: 'app_addPicture')]
-    public function AddPicture() :Response
-    {
-
-        return $this->render('picture/addpicture.html.twig');
-    }
 }

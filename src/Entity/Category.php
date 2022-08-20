@@ -24,10 +24,10 @@ class Category
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'categories')]
     private $parent;
 
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private $categories;
 
-    #[ORM\ManyToMany(targetEntity: Trick::class, mappedBy: 'Category')]
+    #[ORM\ManyToMany(targetEntity: Trick::class, mappedBy: 'categories')]
     private Collection $tricks;
 
     public function __construct()

@@ -27,7 +27,11 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tricks</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ path('app_trick_index') }}">All Tricks</a></li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a class="dropdown-item" href="{{ path('app_trick_index') }}">All Tricks</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{{ path('app_home') }}">All Tricks</a></li>
+                            {% endif %}
                             <li><hr class="dropdown-divider" /></li>
                             <li><a class="dropdown-item" href="#">Popular Tricks</a></li>
                             <li><a class="dropdown-item" href="#">New Added Tricks</a></li>
@@ -71,7 +75,7 @@
 
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
-
+        <script src="{{ asset('bootstrap-5.1.3-dist/js/bootstrap.js') }}"></script>
     <!-- Core theme JS-->
     <script src="{{ asset('js/scripts.js') }}"></script>
     {% endblock %}
