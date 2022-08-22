@@ -18,33 +18,17 @@ class TrickType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('publicationStatusTrick')
-          /*  ->add('Category')
-            ->add('picture', FileType::class, [
-                'label' => "Add Pictures :",
-                'multiple' => true,
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '2048k',
-                        'mimeTypes' => [
-                            'image/jpeg'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid jpeg image',
-                    ])
-                ],
-            ])*/
-              ->add('picture', CollectionType::class,[
-              'entry_type' => PictureType::class,
-              'by_reference' => false,
-              "allow_add" => true,
-              "allow_delete" => true
+            ->add('picture', CollectionType::class,[
+                'entry_type' => PictureType::class,
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true
           ])
             ->add('video',CollectionType::class,[
-              'entry_type' => VideoType::class,
+            'entry_type' => VideoType::class,
                 'by_reference' => false,
-              'allow_add' => true,
-              'allow_delete'=> true
+                'allow_add' => true,
+                'allow_delete'=> true
           ])
         ;
     }

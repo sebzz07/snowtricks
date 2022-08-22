@@ -3,7 +3,7 @@
 {% block title %}Trick{% endblock %}
 
 {% block body %}
-    <h1>{{ trick.name }}</h1>
+    <h1>{{ trick.name }}<a class="btn btn-primary mt-auto" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}">Edit</a></h1>
     <div><p>Created at {{ trick.createdAt ? trick.createdAt|date('Y-m-d H:i:s') : '' }}</p></div>
     <div><p>Modified at {{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d H:i:s') : '' }}</p></div>
     <div class="d-flex flex-row bd-highlight mb-3">
@@ -14,12 +14,7 @@
     <p>{{ trick.description }}</p>
 
 <h2>Pictures</h2>
-<div><a class="btn btn-outline-primary mt-auto" href="{{ "app_addPicture" }}">Add Picture</a></div>
-<br>
-
-
-
-    <section class="py-5">
+    <section class="py-1">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 {% for picture in trick.picture %}
@@ -39,11 +34,6 @@
         </div>
     </section>
 
-
-
-
-
-
 <table class="table">
     <thead>
     <tr>
@@ -61,8 +51,6 @@
     </tbody>
 </table>
 <h2>Videos</h2>
-<div><a class="btn btn-outline-primary mt-auto" href="#">Add Video</a></div>
-<br>
 <table class="table">
     <thead>
     <tr>

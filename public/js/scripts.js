@@ -1,7 +1,10 @@
-/*!
-* Start Bootstrap - Shop Homepage v5.0.5 (https://startbootstrap.com/template/shop-homepage)
-* Copyright 2013-2022 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-shop-homepage/blob/master/LICENSE)
-*/
-// This file is intentionally blank
-// Use this file to add JavaScript to your project
+const addItem = (e) => {
+    const collectionHolder = document.querySelector(e.currentTarget.dataset.collection);
+    let index = parseInt(collectionHolder.dataset.index);
+    const prototype = collectionHolder.dataset.prototype;
+    console.log(collectionHolder.dataset);
+    collectionHolder.innerHTML += prototype.replace(/__name__/g, index);
+    collectionHolder.dataset.index = index + 1;
+}
+
+document.querySelectorAll('.btn-add').forEach(btn=> btn.addEventListener('click', addItem))
