@@ -23,6 +23,7 @@ class TrickRepository extends ServiceEntityRepository
 
     public function add(Trick $entity, bool $flush = false): void
     {
+        $entity->setModifiedAt( new \DateTimeImmutable());
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {

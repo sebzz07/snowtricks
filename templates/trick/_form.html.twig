@@ -1,5 +1,6 @@
 {{ form_start(form) }}
     {{  form_widget(form._token) }}
+    {{ form_errors(form) }}
     {{ form_row(form.name) }}
     {{ form_row(form.description) }}
     <button type="button" class="btn btn-primary mt-auto btn-add" id="add_picture" data-collection="#pictures">Add Picture</button>
@@ -13,8 +14,9 @@
         data-index="{{ form.picture|length > 0 ? form.picture|last.vars.name + 1 : 0 }}">
 
         {% for picture in form.picture %}
-            {{ include('trick/_picture_form.html.twig', {form: picture}) }}
-
+            <div class="col-4 existing-item">
+                {{ include('trick/_picture_form.html.twig', {form: picture}) }}
+            </div>
         {% endfor %}
     </div>
 
@@ -30,7 +32,9 @@
         data-index="{{ form.video|length > 0 ? form.video|last.vars.name + 1 : 0 }}">
 
         {% for video in form.video %}
-        {{ include('trick/_video_form.html.twig', {form: video})}}
+        <div class="col-4 existing-item">
+            {{ include('trick/_video_form.html.twig', {form: video})}}
+        </div>
         {% endfor %}
     </div>
     <button class="btn btn-primary mt-auto">{{ button_label|default('Save') }}</button>

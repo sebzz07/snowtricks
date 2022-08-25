@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\DateImmutableType;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
@@ -27,11 +28,11 @@ class Trick
     private string $description;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist'])]
-
+    #[Assert\Valid]
     private Collection $picture;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'])]
-
+    #[Assert\Valid]
     private Collection $video;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]
@@ -119,7 +120,7 @@ class Trick
     public function addPicture(Picture $picture): self
     {
         if (!$this->picture->contains($picture)) {
-            $this->picture[] = $picture;
+            $this->picture->add($picture);
             $picture->setTrick($this);
         }
 
