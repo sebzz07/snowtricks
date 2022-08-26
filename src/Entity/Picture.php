@@ -27,6 +27,8 @@ class Picture
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
+    private $file;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -78,5 +80,21 @@ class Picture
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file): void
+    {
+        $this->file = $file;
     }
 }

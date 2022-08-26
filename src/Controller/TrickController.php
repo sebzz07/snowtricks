@@ -42,15 +42,16 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $pictures = $form->get('picture')->getData();
+            $pictures = $form->get('picture');
 
 
             foreach ($pictures as $picture) {
-
-                dd($picture);
+                $dataPicture = $picture->getData();
+                dd($dataPicture);
                 $originalFilename = pathinfo($picture->getPictureLink() , PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$picture->guessExtension();
+
                 try{
                     $picture->move(
                         $this->getParameter('pictures_directory'),
