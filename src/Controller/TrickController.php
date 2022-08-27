@@ -42,32 +42,36 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $pictures = $form->get('picture');
+            $dataPictures = $form->get('picture');
 
 
-            foreach ($pictures as $picture) {
-                $dataPicture = $picture->getData();
-                dd($dataPicture);
-                $originalFilename = pathinfo($picture->getPictureLink() , PATHINFO_FILENAME);
+            foreach ($dataPictures as $dataPicture) {
+
+                $pictureInformations = $dataPicture->getData();
+                $pictureFile= $pictureInformations->getFile();
+
+                $originalFilename = pathinfo($pictureFile , PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$picture->guessExtension();
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
 
                 try{
-                    $picture->move(
-                        $this->getParameter('pictures_directory'),
+                    $pictureFile->move(
+                        $this->getParameter('Pictures_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
                     // ... handle exception if something happens during file upload
                     return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
                 }
-                $pic = new Picture();
-                $pic->setPictureLink($newFilename);
-                $trick->addPicture($pic);
+
+
+                $pictureInformations->setPictureLink($newFilename);
+                $pictureInformations->setUser($this->getUser());
+
             }
 
             $trick->setSlug($slugGeneratorService->getSlug($trick->getName()));
-            dd($trick);
+            $trick->setUser($this->getUser());
 
             $trickRepository->add($trick, true);
 

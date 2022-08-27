@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\PictureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
@@ -85,7 +87,7 @@ class Picture
     /**
      * @return mixed
      */
-    public function getFile()
+    public function getFile(): ?File
     {
         return $this->file;
     }
@@ -93,7 +95,7 @@ class Picture
     /**
      * @param mixed $file
      */
-    public function setFile($file): void
+    public function setFile(File $file): void
     {
         $this->file = $file;
     }
