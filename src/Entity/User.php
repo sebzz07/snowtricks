@@ -37,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $linkUserPicture;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Picture::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Pictures::class, orphanRemoval: true)]
     private $pictures;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Video::class, orphanRemoval: true)]
@@ -172,14 +172,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Picture>
+     * @return Collection<int, Pictures>
      */
     public function getPictures(): Collection
     {
         return $this->pictures;
     }
 
-    public function addPicture(Picture $picture): self
+    public function addPicture(Pictures $picture): self
     {
         if (!$this->pictures->contains($picture)) {
             $this->pictures[] = $picture;
@@ -189,7 +189,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removePicture(Picture $picture): self
+    public function removePicture(Pictures $picture): self
     {
         if ($this->pictures->removeElement($picture)) {
             // set the owning side to null (unless already changed)

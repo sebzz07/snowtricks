@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Picture;
+use App\Entity\Pictures;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,7 +16,7 @@ class PictureType extends AbstractType
     {
         $builder
             ->add('file', FileType::class,[
-                'label' => "Picture to upload",
+                'label' => "Pictures to upload",
                 'multiple' => false,
                 'mapped' => true,
                 'required' => false,
@@ -26,7 +26,7 @@ class PictureType extends AbstractType
                         'mimeTypes' => [
                             'image/jpeg',
                         ],
-                        'mimeTypesMessage' => 'Please upload a valid Picture (jpg, jpeg)',
+                        'mimeTypesMessage' => 'Please upload a valid Pictures (jpg, jpeg)',
                     ])
             ]])
             ->add('pictureLink',TextType::class)
@@ -38,7 +38,7 @@ class PictureType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Picture::class,
+            'data_class' => Pictures::class,
         ]);
     }
 }

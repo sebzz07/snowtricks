@@ -17,8 +17,7 @@ class TrickType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('publicationStatusTrick',null ,['empty_data' => 'Waiting_validation'])
-            ->add('picture', CollectionType::class,[
+            ->add('pictures', CollectionType::class,[
                 'entry_type' => PictureType::class,
                 'by_reference' => false,
                 'allow_add' => true,

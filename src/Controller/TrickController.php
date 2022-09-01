@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Picture;
+use App\Entity\Pictures;
 use App\Entity\Post;
 use App\Entity\Trick;
 use App\Form\PostType;
@@ -34,7 +34,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, TrickRepository $trickRepository,SluggerInterface $slugger, SlugGeneratorService $slugGeneratorService): Response
+    public function new(Request $request, TrickRepository $trickRepository,SluggerInterface $slugger): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -42,13 +42,13 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $dataPictures = $form->get('picture');
+            $pictureCollectionFields = $form->get('picture');
 
 
-            foreach ($dataPictures as $dataPicture) {
+            foreach ($pictureCollectionFields as $pictureField ) {
 
-                $pictureInformations = $dataPicture->getData();
-                $pictureFile= $pictureInformations->getFile();
+                $picture = $pictureField->getData();
+                $pictureFile= $picture->getFile();
 
                 $originalFilename = pathinfo($pictureFile , PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
@@ -64,13 +64,11 @@ class TrickController extends AbstractController
                     return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
                 }
 
-
-                $pictureInformations->setPictureLink($newFilename);
-                $pictureInformations->setUser($this->getUser());
-
+                $picture->setPictureLink($newFilename);
+                $picture->setUser($this->getUser());
             }
 
-            $trick->setSlug($slugGeneratorService->getSlug($trick->getName()));
+            $trick->setSlug($slugger->slug($trick->getName()));
             $trick->setUser($this->getUser());
 
             $trickRepository->add($trick, true);
@@ -111,19 +109,6 @@ class TrickController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-    /**
-     * @param Trick $trick
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @return Response
-     */
-    #[Route('/{slug}/addpicture', name: 'app_addPicture')]
-    public function AddPicture() :Response
-    {
-
-        return $this->render('picture/addpicture.html.twig');
-    }
-
 
     #[Route('/{slug}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Trick $trick, TrickRepository $trickRepository): Response
@@ -141,6 +126,17 @@ class TrickController extends AbstractController
             'trick' => $trick,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/{slug}/status/{publicationStatus}', name: 'app_trick_status', methods: ['GET', 'POST'])]
+    public function unpublished(Request $request, string $publicationStatus, Trick $trick, TrickRepository $trickRepository): Response
+    {
+
+            $trick->setPublicationStatusTrick($publicationStatus);
+            $trickRepository->add($trick, true);
+
+            return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
+
     }
 
 }

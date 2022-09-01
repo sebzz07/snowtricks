@@ -29,6 +29,11 @@
                 <td>
                     <a href="{{ path('app_trick', { 'slug': trick.slug }) }}">show</a>
                     <a href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}">edit</a>
+                    {% if trick.publicationStatusTrick == 'Published' %}
+                        <a href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}">Unpublish</a>
+                    {% else %}
+                        <a href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'published' }) }}">publish</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

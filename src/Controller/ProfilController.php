@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ProfileController extends AbstractController
+class ProfilController extends AbstractController
 {
-    #[Route('/profile', name: 'app_profile')]
+    #[Route('/profil', name: 'app_profil')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -22,12 +22,12 @@ class ProfileController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Your profile has been updates.');
-            return $this->redirectToRoute('app_profile');
+            $this->addFlash('success', 'Your profil has been updates.');
+            return $this->redirectToRoute('app_profil');
         };
 
         return $this->render('profile/index.html.twig', [
-            'controller_name' => 'ProfileController',
+            'controller_name' => 'ProfilController',
             'form' => $form->createView(),
         ]);
     }

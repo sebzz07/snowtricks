@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Picture;
+use App\Entity\Pictures;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Post;
@@ -62,13 +62,20 @@ class AppFixtures extends Fixture
             $trick->setName("snowtrick n°" . $i)
                 ->setSlug("snowtrick" . $i)
                 ->setDescription("snowtrick description n°" . $i)
-                ->setPublicationStatusTrick("published")
+                ->setPublicationStatusTrick("Published")
                 ->SetUser($this->getReference(self::ADMIN_USER_REFERENCE));
             $manager->persist($trick);
 
             for ($j = 1; $j <= rand(1,5); $j++) {
-                $picture = new Picture();
-                $picture->setPictureLink(" picture N°" . $j ." of trick n°" . $i)
+                $picture = new Pictures();
+                $picture->setPictureLink("php54645F-645BRa1aca.jpg")
+                    ->setPictureName("Name of picture N°" . $j ." of trick n°" . $i)
+                    ->setTrick($trick)
+                    ->setUser($this->getReference(self::ADMIN_USER_REFERENCE));
+                $manager->persist($picture);
+                $j++;
+                $picture = new Pictures();
+                $picture->setPictureLink("php981F-630a00a1a44ca.jpg")
                     ->setPictureName("Name of picture N°" . $j ." of trick n°" . $i)
                     ->setTrick($trick)
                     ->setUser($this->getReference(self::ADMIN_USER_REFERENCE));

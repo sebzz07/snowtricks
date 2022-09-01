@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Picture;
+use App\Entity\Pictures;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Picture>
+ * @extends ServiceEntityRepository<Pictures>
  *
- * @method Picture|null find($id, $lockMode = null, $lockVersion = null)
- * @method Picture|null findOneBy(array $criteria, array $orderBy = null)
- * @method Picture[]    findAll()
- * @method Picture[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Pictures|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Pictures|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Pictures[]    findAll()
+ * @method Pictures[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PictureRepository extends ServiceEntityRepository
+class PicturesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Picture::class);
+        parent::__construct($registry, Pictures::class);
     }
 
-    public function add(Picture $entity, bool $flush = false): void
+    public function add(Pictures $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class PictureRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Picture $entity, bool $flush = false): void
+    public function remove(Pictures $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class PictureRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Picture[] Returns an array of Picture objects
+//     * @return Pictures[] Returns an array of Pictures objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class PictureRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Picture
+//    public function findOneBySomeField($value): ?Pictures
 //    {
 //        return $this->createQueryBuilder('p')
 //            ->andWhere('p.exampleField = :val')

@@ -13,6 +13,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 class Trick
 {
+
+    public const PUBLICATION_STATUS_WAITING = 'Waiting_validation';
+    public const PUBLICATION_STATUS_PUBLISHED = 'Published';
+    public const PUBLICATION_STATUS_UNPUBLISHED = 'Unpublished';
+    public const PUBLICATION_STATUSES = [
+        self::PUBLICATION_STATUS_PUBLISHED,
+        self::PUBLICATION_STATUS_WAITING,
+        self::PUBLICATION_STATUS_UNPUBLISHED
+    ];
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -27,9 +36,9 @@ class Trick
     #[ORM\Column(type: 'string', length: 9999)]
     private string $description;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Pictures::class, cascade: ['persist'])]
     #[Assert\Valid]
-    private Collection $picture;
+    private Collection $pictures;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'])]
     #[Assert\Valid]
@@ -40,6 +49,7 @@ class Trick
     private User $user;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Choice(choices: self::PUBLICATION_STATUSES)]
     private string $publicationStatusTrick;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Post::class)]
@@ -59,8 +69,9 @@ class Trick
     {
         $this->created_at = new \DateTimeImmutable();
         $this->modified_at = new \DateTimeImmutable();
-        $this->picture = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
         $this->video = new ArrayCollection();
+        $this->publicationStatusTrick = self::PUBLICATION_STATUS_WAITING;
     }
 
     public function __toString()
@@ -110,29 +121,29 @@ class Trick
     }
 
     /**
-     * @return Collection<int, Picture>
+     * @return Collection<int, Pictures>
      */
-    public function getPicture(): Collection
+    public function getPictures(): Collection
     {
-        return $this->picture;
+        return $this->pictures;
     }
 
-    public function addPicture(Picture $picture): self
+    public function addPictures(Pictures $pictures): self
     {
-        if (!$this->picture->contains($picture)) {
-            $this->picture->add($picture);
-            $picture->setTrick($this);
+        if (!$this->pictures->contains($pictures)) {
+            $this->pictures->add($pictures);
+            $pictures->setTrick($this);
         }
 
         return $this;
     }
 
-    public function removePicture(Picture $picture): self
+    public function removePictures(Pictures $pictures): self
     {
-        if ($this->picture->removeElement($picture)) {
+        if ($this->pictures->removeElement($pictures)) {
             // set the owning side to null (unless already changed)
-            if ($picture->getTrick() === $this) {
-                $picture->setTrick(null);
+            if ($pictures->getTrick() === $this) {
+                $pictures->setTrick(null);
             }
         }
 
