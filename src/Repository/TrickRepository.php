@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Trick;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,7 +24,7 @@ class TrickRepository extends ServiceEntityRepository
 
     public function add(Trick $entity, bool $flush = false): void
     {
-        $entity->setModifiedAt( new \DateTimeImmutable());
+        $entity->setModifiedAt( new DateTimeImmutable());
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {

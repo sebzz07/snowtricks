@@ -8,7 +8,7 @@
         {% if trick.publicationStatusTrick == 'Published' %}
             <a class="btn btn-primary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}">Unpublish</a>
         {% else %}
-            <a class="btn btn-primary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'published' }) }}">publish</a>
+            <a class="btn btn-primary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published' }) }}">publish</a>
         {% endif %}
     </h1>
     <div><p>Created at {{ trick.createdAt ? trick.createdAt|date('Y-m-d H:i:s') : '' }}</p></div>

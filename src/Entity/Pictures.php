@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\PicturesRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 
 #[ORM\Entity(repositoryClass: PicturesRepository::class)]
@@ -23,6 +23,7 @@ class Pictures
     private $pictureName;
 
     #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'pictures')]
+    #[ORM\JoinColumn(nullable: false)]
     private $trick;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'pictures')]

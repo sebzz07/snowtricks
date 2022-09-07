@@ -29,9 +29,7 @@ class PictureType extends AbstractType
                         'mimeTypesMessage' => 'Please upload a valid Pictures (jpg, jpeg)',
                     ])
             ]])
-            ->add('pictureLink',TextType::class)
             ->add('pictureName',TextType::class)
-            ->add('trick')
         ;
     }
 

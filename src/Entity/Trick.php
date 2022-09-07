@@ -5,9 +5,7 @@ namespace App\Entity;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\DateImmutableType;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
@@ -37,11 +35,9 @@ class Trick
     private string $description;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Pictures::class, cascade: ['persist'])]
-    #[Assert\Valid]
     private Collection $pictures;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'])]
-    #[Assert\Valid]
     private Collection $video;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]
@@ -120,15 +116,19 @@ class Trick
         return $this;
     }
 
-    /**
-     * @return Collection<int, Pictures>
-     */
     public function getPictures(): Collection
     {
         return $this->pictures;
     }
 
-    public function addPictures(Pictures $pictures): self
+
+    public function setPictures(Collection $pictures) : self
+    {
+        $this->pictures = $pictures;
+        return $this;
+    }
+
+    public function addPictures(Collection $pictures): self
     {
         if (!$this->pictures->contains($pictures)) {
             $this->pictures->add($pictures);
