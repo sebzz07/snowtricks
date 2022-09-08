@@ -65,6 +65,7 @@ class Trick
     {
         $this->created_at = new \DateTimeImmutable();
         $this->modified_at = new \DateTimeImmutable();
+        $this->categories = new ArrayCollection();
         $this->pictures = new ArrayCollection();
         $this->video = new ArrayCollection();
         $this->publicationStatusTrick = self::PUBLICATION_STATUS_WAITING;
