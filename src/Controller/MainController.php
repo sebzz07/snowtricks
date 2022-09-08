@@ -2,30 +2,33 @@
 
 namespace App\Controller;
 
-use App\Entity\Post;
-use App\Entity\Trick;
-use App\Form\PostType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\TrickRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 
 class MainController extends AbstractController
 {
     /**
+     * @param TrickRepository $tricks
      * @param ManagerRegistry $doctrine
      * @return Response
      */
     #[Route('/', name: 'app_home')]
-    public function index(ManagerRegistry $doctrine): Response
+    public function index(TrickRepository $tricks, ManagerRegistry $doctrine): Response
     {
-        $tricks = $doctrine->getRepository(Trick::class)->getAllTricks();
+        //$tricks = $doctrine->getRepository(Trick::class)->getAllTricks();
         return $this->render('main/index.html.twig', [
-            'tricks' => $tricks
+            'tricks' => $tricks->findBy([],[],5,0)
+        ]);
+    }
+    #[Route('/nextTricks/{offset}', name: 'app_loadMore')]
+    public function loadMore(TrickRepository $tricks, ManagerRegistry $doctrine, $offset): Response
+    {
+        //$tricks = $doctrine->getRepository(Trick::class)->getAllTricks();
+        return $this->render('main/index.html.twig', [
+            'tricks' => $tricks->findBy([],[],5,$offset)
         ]);
     }
 
