@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="{{ path('app_home') }}">SnowTricks</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_trick_new') }}">Share a Tricks</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tricks</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a class="dropdown-item" href="{{ path('app_trick_index') }}">All Tricks</a></li>
+                        {% else %}
+                            <li><a class="dropdown-item" href="{{ path('app_home') }}">All Tricks</a></li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="#">Popular Tricks</a></li>
+                        <li><a class="dropdown-item" href="#">New Added Tricks</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ path('app_profil') }}">My Profile</a></li>
+                        <li><a class="dropdown-item" href="{{ path('app_reset_password') }}">Reset my Password</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">Register</a></li>
+            </ul>
+            <div class="d-flex">
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+                    <a class="btn btn-outline-dark" href="{{ path('app_logout') }}">
+                        Logout
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                    </a>
+                {% else %}
+                    <a class="btn btn-outline-dark" href="{{ path('app_login') }}">
+                        Login
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                    </a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</nav>

@@ -4,7 +4,7 @@
 
 {% block body %}
     <!-- Header-->
-    <header class="bg-dark py-5">
+    <header class="bg-dark py-5" style="background-image: url({{ asset('assets/heroBanner.jpg') }}); background-position: center; background-size: cover;">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
                 <h1 class="display-4 fw-bolder">SnowTricks</h1>
@@ -15,11 +15,14 @@
     <!-- Section-->
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div id="trick-container" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 {{ include('main/_trickList_partial.html.twig') }}
-                <div class="card-body">
-                    <a id="more" href="#">See More</a>
-                </div>
+
+            </div>
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <button id="load-more" data-offset="{{ offset }}" class="btn btn-primary">
+                    Load more
+                </button>
             </div>
         </div>
     </section>
