@@ -4,13 +4,14 @@
 
 {% block body %}
     <!-- Header-->
-    <header class="bg-dark py-5" style="background-image: url({{ asset('assets/heroBanner.jpg') }}); background-position: center; background-size: cover;">
-        <div class="container px-4 px-lg-5 my-5">
+    <header class="bg-dark d-flex align-items-center flex-column" style="background-image: url({{ asset('assets/heroBanner.jpg') }}); height: 90vh; background-position: center; background-size: cover;">
+        <div class="container mb-auto p-2 px-4 px-lg-5 my-5">
             <div class="text-center text-white">
                 <h1 class="display-4 fw-bolder">SnowTricks</h1>
                 <p class="lead fw-normal text-white-50 mb-0">Find your Snowboard Tricks</p>
             </div>
         </div>
+        <div class="align-self-end"><a href="#trick-container"><i class="row bi bi-arrow-down-short" style="font-size: 4rem;"></i></a></div>
     </header>
     <!-- Section-->
     <section class="py-5">

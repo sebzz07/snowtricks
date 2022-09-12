@@ -22,6 +22,8 @@ require('bootstrap');
 // require('bootstrap/js/dist/tooltip');
 // require('bootstrap/js/dist/popover');
 
+
+
 /*** Generator of new under form to add a trick's picture ***/
 
 /*
