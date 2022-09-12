@@ -6,8 +6,12 @@
                 New
             </div>
             <!-- Trick image-->
-            <img class="card-img-top" src="https://picsum.photos/seed/picsum/450/300" alt="..."/>
-            <!-- Trick details-->
+            {% if trick.pictures[0].pictureLink %}
+            <img class="card-img-top" src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}" alt="{{ trick.pictures[0].pictureName }}"/>
+            {% else %}
+                <img class="card-img-top" src="{{ asset('assets/heroBanner.jpg') }}" alt="default picture"/>
+            {% endif %}
+                <!-- Trick details-->
             <div class="card-body p-4">
                 <div class="text-center">
                     <!-- Trick name-->

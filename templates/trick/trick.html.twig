@@ -85,22 +85,21 @@
 {% endif %}
 <br>
 <h5>Comments :</h5>
-
-{{ form_start(form) }}
-{{ form_row(form.postContent) }}
-<button class="btn btn btn-primary" type="submit">
-    Publish my comment
-</button>
-{{ form_end(form) }}
+    {% if is_granted('ROLE_USER') %}
+        {{ form_start(form) }}
+        {{ form_row(form.postContent) }}
+        <button class="btn btn btn-primary" type="submit">
+            Publish my comment
+        </button>
+        {{ form_end(form) }}
+    {% endif %}
 <br>
-<ul class="list-group">
-{% for post in trick.posts %}
-
-
-
-    <li class="list-group-item"><small>{{ post.createdAt|date("m/d/Y") }} by {{ post.user }}
-            : </small><br>{{ post.postContent }}</li>
-
-    {% endfor %}
+<ul id="post-container" class="list-group">
+{{ include('trick/_postList_partial.html.twig') }}
 </ul>
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        <button id="load-more-posts" data-slug="{{ trick.slug }}" data-offsetpost="{{ offsetpost }}" class="btn btn-primary">
+            Load more
+        </button>
+    </div>
     {% endblock %}

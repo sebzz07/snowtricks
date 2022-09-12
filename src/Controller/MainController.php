@@ -18,23 +18,21 @@ class MainController extends AbstractController
      * @return Response
      */
     #[Route('/', name: 'app_home')]
-    public function index(TrickRepository $tricks, ManagerRegistry $doctrine): Response
+    public function index(TrickRepository $tricks): Response
     {
-        //$tricks = $doctrine->getRepository(Trick::class)->getAllTricks();
         return $this->render('main/index.html.twig', [
             'tricks' => $tricks->findBy([],['created_at' => 'ASC'],5,0),
-            'offset' => 50
+            'offset' => 5
         ]);
     }
 
     /**
      * @param TrickRepository $tricks
-     * @param ManagerRegistry $doctrine
      * @param $offset
      * @return Response
      */
     #[Route('/nextTricks/{offset}', name: 'app_loadMore')]
-    public function loadMore(TrickRepository $tricks, ManagerRegistry $doctrine, $offset): Response
+    public function loadMoreTricks(TrickRepository $tricks, $offset): Response
     {
         $html = $this->render('main/_trickList_partial.html.twig', [
             'tricks' => $tricks->findBy([],['created_at' => 'ASC'],5,$offset)

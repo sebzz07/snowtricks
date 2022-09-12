@@ -1,0 +1,8 @@
+{% for post in posts %}
+
+
+
+    <li class="list-group-item"><small>{{ post.createdAt|date("m/d/Y") }} by {{ post.user }}
+            : </small><br>{{ post.postContent }}</li>
+
+{% endfor %}

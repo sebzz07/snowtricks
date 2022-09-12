@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Entity\Trick;
 use App\Form\PostType;
 use App\Form\TrickType;
+use App\Repository\PostRepository;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\NoReturn;
@@ -87,7 +88,7 @@ class TrickController extends AbstractController
      * @return Response
      */
     #[Route('/{slug}', name: 'app_trick', methods: ['GET', 'POST'])]
-    public function read(Trick $trick, Request $request, EntityManagerInterface $entityManager): Response
+    public function read(Trick $trick, PostRepository $postRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $post = new Post();
         $form = $this->createForm(PostType::class,$post)->handleRequest($request);
@@ -102,9 +103,13 @@ class TrickController extends AbstractController
         };
 
 
+        $posts = $postRepository->findBy(['trick'=> $trick],['created_at' => 'DESC'], 5, 0);
+
         return $this->render('trick/trick.html.twig', [
             'trick' => $trick,
-            'form' => $form->createView()
+            'posts' => $posts,
+            'form' => $form->createView(),
+            'offsetpost' => 5
         ]);
     }
 
@@ -165,4 +170,20 @@ class TrickController extends AbstractController
 
     }
 
+    /**
+     * @param Trick $trick
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    #[Route('/{slug}/nextposts/{offsetPost}', name: 'app_post_loadMore', methods: ['GET', 'POST'])]
+    public function loadMorePosts(PostRepository $postRepository,Trick $trick, int $offsetPost): Response
+    {
+
+        $posts = $postRepository->findBy(['trick'=> $trick],['created_at' => 'DESC'], 5, $offsetPost);
+
+        return $this->render('trick/_postList_partial.html.twig', [
+            'posts' => $posts
+        ]);
+    }
 }
