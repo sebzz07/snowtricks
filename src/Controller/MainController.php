@@ -9,19 +9,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class MainController extends AbstractController
 {
     /**
      * @param TrickRepository $tricks
-     * @param ManagerRegistry $doctrine
      * @return Response
      */
     #[Route('/', name: 'app_home')]
     public function index(TrickRepository $tricks): Response
     {
+        if ($this->getUser() !== null){
+            $criteria = ['publicationStatusTrick' => 'Published' ];
+        }else{
+            $criteria = [];
+        }
+
+
         return $this->render('main/index.html.twig', [
-            'tricks' => $tricks->findBy([],['created_at' => 'ASC'],5,0),
+            'tricks' => $tricks->findBy($criteria,['created_at' => 'ASC'],5,0),
             'offset' => 5
         ]);
     }
@@ -34,11 +41,15 @@ class MainController extends AbstractController
     #[Route('/nextTricks/{offset}', name: 'app_loadMore')]
     public function loadMoreTricks(TrickRepository $tricks, $offset): Response
     {
-        $html = $this->render('main/_trickList_partial.html.twig', [
-            'tricks' => $tricks->findBy([],['created_at' => 'ASC'],5,$offset)
+        if ($this->getUser() !== null){
+            $criteria = ['publicationStatusTrick' => 'Published' ];
+        }else{
+            $criteria = [];
+        }
+        return $this->render('main/_trickList_partial.html.twig', [
+            'tricks' => $tricks->findBy($criteria,['created_at' => 'ASC'],5,$offset)
         ]);
 
-        return new Response($html);
 
     }
 

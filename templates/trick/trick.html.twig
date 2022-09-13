@@ -3,12 +3,31 @@
 {% block title %}Trick{% endblock %}
 
 {% block body %}
-    <h1>{{ trick.name }}
-        <a class="btn btn-primary mt-auto mx-1" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}">Edit</a>
-        {% if trick.publicationStatusTrick == 'Published' %}
-            <a class="btn btn-primary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}">Unpublish</a>
+
+    {#
+    <div class="container m-4">
+<header class="bg-dark d-flex align-items-center flex-column" style="background-image: url({{ asset('uploads/images/'~picture.pictureLink) }}); height: 50vh; background-position: center; background-size: cover;">
+    <div class="container mb-auto p-2 px-4 px-lg-5 my-5">
+        {% if trick.pictures[0].pictureLink %}
+            <img class="card-img-top" src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}" alt="{{ trick.pictures[0].pictureName }}"/>
         {% else %}
-            <a class="btn btn-primary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published' }) }}">publish</a>
+            <img class="card-img-top" src="{{ asset('assets/heroBanner.jpg') }}" alt="default picture"/>
+        {% endif %}
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">{{ trick.name }}</h1>
+        </div>
+    </div>
+
+</header> #}
+
+
+
+    <h1>{{ trick.name }}
+        <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil"></i></a>
+        {% if trick.publicationStatusTrick == 'Published' %}
+            <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}"><i class="bi bi-trash"></i> Unpublish</a>
+        {% else %}
+            <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published' }) }}"><i class="bi bi-globe"></i> publish</a>
         {% endif %}
     </h1>
     <div><p>Created at {{ trick.createdAt ? trick.createdAt|date('Y-m-d H:i:s') : '' }}</p></div>
@@ -98,8 +117,9 @@
 {{ include('trick/_postList_partial.html.twig') }}
 </ul>
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-        <button id="load-more-posts" data-slug="{{ trick.slug }}" data-offsetpost="{{ offsetpost }}" class="btn btn-primary">
-            Load more
+        <button id="load-more-posts" data-slug="{{ trick.slug }}" data-offsetpost="{{ offsetpost }}" class="btn btn-primary my-2">
+            Older comments...
         </button>
     </div>
+
     {% endblock %}

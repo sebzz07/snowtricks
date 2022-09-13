@@ -2,9 +2,15 @@
     <div class="col mb-5">
         <div class="card h-100">
             <!-- New badge-->
-            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                New
-            </div>
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+                <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 2.5rem" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil"></i></a>
+                {% if trick.publicationStatusTrick == 'Published' %}
+                    <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}"><i class="bi bi-trash"></i></a>
+                {% else %}
+                    <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published' }) }}"><i class="bi bi-globe"></i></a>
+                {% endif %}
+            {% endif %}
+
             <!-- Trick image-->
             {% if trick.pictures[0].pictureLink %}
             <img class="card-img-top" src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}" alt="{{ trick.pictures[0].pictureName }}"/>
@@ -16,7 +22,9 @@
                 <div class="text-center">
                     <!-- Trick name-->
                     <h5 class="fw-bolder">{{ trick.name }}</h5>
-                    <p><a href="#" class="btn btn-info">#tag</a></p>
+                    {% for category in trick.category %}
+                    <p><a href="#" class="btn btn-info">{{ category.name }}</a></p>
+                    {% endfor %}
                     <p>Created at {{ trick.createdAt|date("m/d/Y") }} </p><br>
                     <p> Updated at {{ trick.modifiedAt|date("m/d/Y") }}</p>
                     <p>{{ trick.posts|length }} comment(s) </p><br>
