@@ -28,8 +28,8 @@ class MainController extends AbstractController
 
 
         return $this->render('main/index.html.twig', [
-            'tricks' => $tricks->findBy($criteria,['created_at' => 'ASC'],5,0),
-            'offset' => 5
+            'tricks' => $tricks->findBy($criteria,['created_at' => 'ASC'],8,0),
+            'offset' => 8
         ]);
     }
 
@@ -47,7 +47,7 @@ class MainController extends AbstractController
             $criteria = [];
         }
         return $this->render('main/_trickList_partial.html.twig', [
-            'tricks' => $tricks->findBy($criteria,['created_at' => 'ASC'],5,$offset)
+            'tricks' => $tricks->findBy($criteria,['created_at' => 'ASC'],8,$offset)
         ]);
 
 

@@ -83,7 +83,7 @@ class AppFixtures extends Fixture
             }
             for ($j = 1; $j <= rand(1,5); $j++) {
                 $video = new Video();
-                $video->setVideoLink(" video N°" . $j ." of trick n°" . $i)
+                $video->setVideoLink("https://www.youtube.com/embed/SQyTWk7OxSI")
                     ->setVideoName("Name of video N°" . $j ." of trick n°" . $i)
                     ->setTrick($trick)
                     ->SetUser($this->getReference(AppFixtures::ADMIN_USER_REFERENCE));

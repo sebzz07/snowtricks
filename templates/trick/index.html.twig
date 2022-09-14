@@ -8,31 +8,29 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>PublicationStatusTrick</th>
-                <th>Created_at</th>
-                <th>Modified_at</th>
-                <th>actions</th>
+                <th  scope="col">Name</th>
+                <th  scope="col">Description</th>
+                <th  scope="col">Publication Status</th>
+                <th  scope="col">Created date</th>
+                <th  scope="col">Modified date</th>
+                <th  scope="col">actions</th>
             </tr>
         </thead>
         <tbody>
         {% for trick in tricks %}
             <tr>
-                <td>{{ trick.id }}</td>
                 <td>{{ trick.name }}</td>
-                <td>{{ trick.description }}</td>
+                <td>{{ trick.description|u.truncate(40, '...') }}</td>
                 <td>{{ trick.publicationStatusTrick }}</td>
-                <td>{{ trick.createdAt ? trick.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ trick.createdAt ? trick.createdAt|date('Y-m-d') : '' }}</td>
+                <td>{{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_trick', { 'slug': trick.slug }) }}">show</a>
-                    <a href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}">edit</a>
+                    <a class="btn btn-secondary" href="{{ path('app_trick', { 'slug': trick.slug }) }}">show</a>
+                    <a class="btn btn-secondary" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}">edit</a>
                     {% if trick.publicationStatusTrick == 'Published' %}
-                        <a href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}">Unpublish</a>
+                        <a class="btn btn-secondary"href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished', 'originOfRequest': 'app_trick_index'  }) }}">Unpublish</a>
                     {% else %}
-                        <a href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published' }) }}">publish</a>
+                        <a class="btn btn-secondary" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published', 'originOfRequest': 'app_trick_index'  }) }}">publish</a>
                     {% endif %}
                 </td>
             </tr>

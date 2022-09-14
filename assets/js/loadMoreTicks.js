@@ -26,7 +26,7 @@ $(document).ready(function () {
                     loadBtn.remove();
                 }else{
                     container.append($html);
-                    loadBtn.dataset.offset = (offset + 5).toString();
+                    loadBtn.dataset.offset = (offset + 8).toString();
                 }
             }
 

@@ -25,9 +25,9 @@
     <h1>{{ trick.name }}
         <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil"></i></a>
         {% if trick.publicationStatusTrick == 'Published' %}
-            <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}"><i class="bi bi-trash"></i> Unpublish</a>
+            <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished', 'originOfRequest': 'app_trick_edit' }) }}"><i class="bi bi-trash"></i> Unpublish</a>
         {% else %}
-            <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published' }) }}"><i class="bi bi-globe"></i> publish</a>
+            <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published', 'originOfRequest': 'app_trick_edit' }) }}"><i class="bi bi-globe"></i> publish</a>
         {% endif %}
     </h1>
     <div><p>Created at {{ trick.createdAt ? trick.createdAt|date('Y-m-d H:i:s') : '' }}</p></div>
@@ -42,10 +42,10 @@
 <h2>Pictures</h2>
     <section class="py-1">
         <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div class="row gx-4 gx-lg-5 justify-content-start">
                 {% for picture in trick.pictures %}
-                    <div class="col mb-5">
-                        <div class="card h-100">
+                    <div class="col-md-6 col-sm-12 mb-5 justify-content-center">
+                        <div class="card" style="width: 18rem;">
                             <!-- Pictures-->
                             <img class="card-img-top" src="{{ asset('uploads/images/'~picture.pictureLink) }}" alt="..."/>
                             <!-- Pictures name-->
@@ -88,7 +88,13 @@
     {% for video in trick.video %}
         <tr>
             <td class="text-center">{{ video.videoName }}</td>
-            <td class="text-center">{{ video.videoLink }}</td>
+            <td class="text-center">
+                <iframe width="336"
+                        height="189"
+                        src="{{ video.videoLink }}"
+                        title="YouTube video player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe></td>
         </tr>
     {% endfor %}
     </tbody>

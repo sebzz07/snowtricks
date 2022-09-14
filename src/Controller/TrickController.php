@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use function PHPUnit\Framework\isNull;
+use function PHPUnit\Framework\throwException;
 
 #[Route('/trick')]
 class TrickController extends AbstractController
@@ -123,32 +124,55 @@ class TrickController extends AbstractController
             $pictureCollectionFields = $form->get('pictures');
 
             foreach ($pictureCollectionFields as $pictureField ) {
-                if($pictureField->getData()->getId() == null) {
+                if ($pictureField->getData()->getId() == null) {
                     $picture = $pictureField->getData();
-                    $pictureFile= $picture->getFile();
-                    $originalFilename = pathinfo($pictureFile , PATHINFO_FILENAME);
+                    $pictureFile = $picture->getFile();
+                    $originalFilename = pathinfo($pictureFile, PATHINFO_FILENAME);
                     $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $pictureFile->guessExtension();
 
-                    try{
+                    try {
                         $pictureFile->move(
                             $this->getParameter('Pictures_directory'),
                             $newFilename
                         );
                     } catch (FileException $e) {
                         // ... handle exception if something happens during file upload
-                        return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
+                        return $this->redirectToRoute('app_trick_edit', [], Response::HTTP_SEE_OTHER);
                     }
 
                     $picture->setPictureLink($newFilename);
                     $picture->setTrick($trick);
                     $picture->setUser($this->getUser());
                 }
-
             }
 
-            $trickRepository->add($trick, true);
+                $videoCollectionFields = $form->get('video');
+                foreach ($videoCollectionFields as $videoField ) {
+                    try {
+                        $video = $videoField->getData();
+                    if(str_contains($video->getVideoLink(), "?v=")) {
+                        $videoLink = $video->getVideoLink();
+                        $arrayExplode = explode("=", $videoLink);
+                        if(count($arrayExplode) <=2) {
+                            $NewVideoLink = "https://www.youtube.com/embed/" . $arrayExplode[1];
+                            $video->setVideoLink($NewVideoLink);
+                        }
+                    }
+                    } catch (FileException $e) {
+                        // ... handle exception if something happens during conversion link
+                        return $this->redirectToRoute('app_trick_edit', [], Response::HTTP_SEE_OTHER);
+                    }
+                    $video->setTrick($trick);
+                    $video->setUser($this->getUser());
+                }
 
+
+            $trickRepository->add($trick, true);
+            $this->addFlash(
+                'notice',
+                "The trick was updated correctly"
+            );
             return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -159,14 +183,23 @@ class TrickController extends AbstractController
     }
 
     #[NoReturn]
-    #[Route('/{slug}/status/{publicationStatus}', name: 'app_trick_status', methods: ['GET', 'POST'])]
-    public function updateStatus(Request $request, string $publicationStatus, Trick $trick, TrickRepository $trickRepository): Response
+    #[Route('/{slug}/status/{publicationStatus}/{originOfRequest}', name: 'app_trick_status', methods: ['GET', 'POST'])]
+    public function updateStatus(string $originOfRequest, string $publicationStatus, Trick $trick, TrickRepository $trickRepository): Response
     {
+        if($publicationStatus == 'Unpublished'){
+            $message = 'the trick was unpublished';
+        } else {
+            $message = 'the trick was published';
+        }
 
-            $trick->setPublicationStatusTrick($publicationStatus);
-            $trickRepository->add($trick, true);
+        $this->addFlash(
+            'notice',
+            $message
+        );
+        $trick->setPublicationStatusTrick($publicationStatus);
+        $trickRepository->add($trick, true);
 
-            return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute($originOfRequest, [], Response::HTTP_SEE_OTHER);
 
     }
 

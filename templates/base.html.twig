@@ -22,7 +22,12 @@
     </head>
     <body>
     {% include('navbar.html.twig') %}
-    <main class="justify-content-center mx-2" >
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <main class="justify-content-center" >
 
             {% block body %}{% endblock %}
     </main>
