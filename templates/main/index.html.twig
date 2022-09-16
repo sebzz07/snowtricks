@@ -4,27 +4,27 @@
 
 {% block body %}
     <!-- Header-->
-    <header class="bg-dark d-flex align-items-center flex-column" style="background-image: url({{ asset('assets/heroBanner.jpg') }}); height: 90vh; background-position: center; background-size: cover;">
-        <div class="container mb-auto p-2 px-4 px-lg-5 my-5">
+    <header class="bg-dark d-flex justify-content-center align-items-center"
+            style="background-image: url({{ asset('assets/heroBanner.jpg') }}); height: 100vh; background-position: center; background-size: cover;">
+        <div class="">
             <div class="text-center text-white">
                 <h1 class="display-4 fw-bolder">SnowTricks</h1>
                 <p class="lead fw-normal text-white-50 mb-0">Find your Snowboard Tricks</p>
             </div>
         </div>
-        <div class="align-self-end"><a href="#trick-container"><i class="row bi bi-arrow-down-short" style="font-size: 4rem;"></i></a></div>
+        <div id="btn-drop-section"><a class="btn btn-outline-dark" href="#trick-container"><i
+                        class="row bi bi-arrow-down-short"
+                        style=" padding:0; margin:-0.7rem ; font-size: 3rem;"></i></a></div>
     </header>
     <!-- Section-->
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div id="trick-container" class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-start">
-                {{ include('main/_trickList_partial.html.twig') }}
-
+    <section id="trick-container" class="container py-5 px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-start">
+            {{ include('main/_trickList_partial.html.twig') }}
             </div>
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 <button id="load-more" data-offset="{{ offset }}" class="btn btn-primary">
                     Load more
                 </button>
             </div>
-        </div>
     </section>
 {% endblock %}

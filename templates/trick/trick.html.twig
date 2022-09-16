@@ -3,129 +3,132 @@
 {% block title %}Trick{% endblock %}
 
 {% block body %}
-
-    {#
-    <div class="container m-4">
-<header class="bg-dark d-flex align-items-center flex-column" style="background-image: url({{ asset('uploads/images/'~picture.pictureLink) }}); height: 50vh; background-position: center; background-size: cover;">
-    <div class="container mb-auto p-2 px-4 px-lg-5 my-5">
-        {% if trick.pictures[0].pictureLink %}
-            <img class="card-img-top" src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}" alt="{{ trick.pictures[0].pictureName }}"/>
-        {% else %}
-            <img class="card-img-top" src="{{ asset('assets/heroBanner.jpg') }}" alt="default picture"/>
-        {% endif %}
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">{{ trick.name }}</h1>
-        </div>
-    </div>
-
-</header> #}
-
-
-
-    <h1>{{ trick.name }}
-        <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil"></i></a>
-        {% if trick.publicationStatusTrick == 'Published' %}
-            <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished', 'originOfRequest': 'app_trick_edit' }) }}"><i class="bi bi-trash"></i> Unpublish</a>
-        {% else %}
-            <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published', 'originOfRequest': 'app_trick_edit' }) }}"><i class="bi bi-globe"></i> publish</a>
-        {% endif %}
-    </h1>
-    <div><p>Created at {{ trick.createdAt ? trick.createdAt|date('Y-m-d H:i:s') : '' }}</p></div>
-    <div><p>Modified at {{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d H:i:s') : '' }}</p></div>
-    <div class="d-flex flex-row bd-highlight mb-3">
-        {% for category in trick.category %}
-        <div class="px-2"><a href="#" class="px-2 btn btn-info">{{ category.name }}</a></div>
-        {% endfor %}
-    </div>
-    <p>{{ trick.description }}</p>
-
-<h2>Pictures</h2>
-    <section class="py-1">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 justify-content-start">
-                {% for picture in trick.pictures %}
-                    <div class="col-md-6 col-sm-12 mb-5 justify-content-center">
-                        <div class="card" style="width: 18rem;">
-                            <!-- Pictures-->
-                            <img class="card-img-top" src="{{ asset('uploads/images/'~picture.pictureLink) }}" alt="..."/>
-                            <!-- Pictures name-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center">{{ picture.pictureName }}</div>
-                            </div>
-                        </div>
-
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-
-<table class="table">
-    <thead>
-    <tr>
-        <th class="text-center">Name</th>
-        <th class="text-center">Link</th>
-    </tr>
-    </thead>
-    <tbody>
+    <!-- Header-->
+    {% set bgImage = "" %}
     {% for picture in trick.pictures %}
-        <tr>
-            <td class="text-center">{{ picture.pictureName }}</td>
-            <td class="text-center">{{ picture.pictureLink }}</td>
-        </tr>
+        {% if trick.pictures[0].pictureLink %}
+            {% set bgImage = asset('uploads/images/'~trick.pictures[0].pictureLink) %}
+        {% else %}
+            {% set bgImage = asset('assets/heroBanner.jpg') %}
+        {% endif %}
     {% endfor %}
-    </tbody>
-</table>
-<h2>Videos</h2>
-<table class="table">
-    <thead>
-    <tr>
-        <th class="text-center">Name</th>
-        <th class="text-center">Link</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for video in trick.video %}
-        <tr>
-            <td class="text-center">{{ video.videoName }}</td>
-            <td class="text-center">
-                <iframe width="336"
-                        height="189"
-                        src="{{ video.videoLink }}"
-                        title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe></td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
 
-<div><a class="btn btn-outline-dark mt-auto" href="{{ path('app_trick_index') }}">back to list</a>
-</div>
-<br>
-{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
-    <div><a class="btn btn-outline-primary mt-auto" href="{{ path('app_trick_edit', {'slug': trick.slug}) }}">edit</a></div>
-    <br>
-    <div>{{ include('trick/_delete_form.html.twig') }}</div>
-{% endif %}
-<br>
-<h5>Comments :</h5>
-    {% if is_granted('ROLE_USER') %}
-        {{ form_start(form) }}
-        {{ form_row(form.postContent) }}
-        <button class="btn btn btn-primary" type="submit">
-            Publish my comment
-        </button>
-        {{ form_end(form) }}
-    {% endif %}
-<br>
-<ul id="post-container" class="list-group">
-{{ include('trick/_postList_partial.html.twig') }}
-</ul>
-    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-        <button id="load-more-posts" data-slug="{{ trick.slug }}" data-offsetpost="{{ offsetpost }}" class="btn btn-primary my-2">
-            Older comments...
-        </button>
+    <div class="container">
+        <header id="header-image" class="bg-dark d-flex justify-content-center align-items-center"
+                style="background-image: url({{ bgImage }}); background-position: center; background-size: cover;">
+            <div>
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder"
+                        style="text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">{{ trick.name }}</h1>
+                </div>
+                <div id="btn-edition" class="position-absolute btn-outline-dark">
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+                        <a class="btn btn-dark bg-dark text-white" style="font-size: 2rem;"
+                           href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil bi--xl"
+                                                                                          style="font-size: 2rem;"></i></a>
+                        {% if trick.publicationStatusTrick == 'Published' %}
+                            <a class="btn btn-dark bg-dark text-white" style="font-size: 2rem;"
+                               href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished', 'originOfRequest': 'app_trick_edit' }) }}"
+                               onclick="return confirm('are you sure you want to unpublish this trick ?')"><i
+                                        class="bi bi-trash bi--xl" style="font-size: 2rem;"></i></a>
+                        {% else %}
+                            <a class="btn btn-dark bg-dark text-white" style="font-size: 2rem;"
+                               href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published', 'originOfRequest': 'app_trick_edit' }) }}"><i
+                                        class="bi bi-globe bi--xl" style="font-size: 2rem;"></i></a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+        </header>
+        <!-- media -->
+
+        <section class="d-flex flex-wrap justify-content-around m-1">
+            {% for picture in trick.pictures %}
+
+                <div class="card m-1" style="width: 250px;">
+                    <!-- Pictures-->
+                    <img class="card-img-top" style="object-fit: cover;" src="{{ asset('uploads/images/'~picture.pictureLink) }}"
+                         alt="..."/>
+                    <!-- Pictures name-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">{{ picture.pictureName }}</div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+            {% for video in trick.video %}
+
+                <div class="card m-1" style="width: 250px;">
+                    <iframe width="250"
+                            height="161"
+                            src="{{ video.videoLink }}"
+                            title="YouTube video player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <!-- Pictures name-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">{{ video.videoName }}</div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </section>
+
+        <div><a class="btn btn-outline-dark mt-auto" href="{{ path('app_trick_index') }}">back to list</a>
+        </div>
+        <br>
+        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+            <div><a class="btn btn-outline-primary mt-auto" href="{{ path('app_trick_edit', {'slug': trick.slug}) }}">edit</a>
+            </div>
+            <br>
+            <div>{{ include('trick/_delete_form.html.twig') }}</div>
+        {% endif %}
+        <br>
+
+        <h1>{{ trick.name }}
+            <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i
+                        class="bi bi-pencil"></i></a>
+            {% if trick.publicationStatusTrick == 'Published' %}
+                <a class="btn btn-secondary mt-auto mx-1"
+                   href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished', 'originOfRequest': 'app_trick_edit' }) }}"><i
+                            class="bi bi-trash"></i> Unpublish</a>
+            {% else %}
+                <a class="btn btn-secondary mt-auto mx-1"
+                   href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published', 'originOfRequest': 'app_trick_edit' }) }}"><i
+                            class="bi bi-globe"></i> publish</a>
+            {% endif %}
+        </h1>
+        <div><p>Created at {{ trick.createdAt ? trick.createdAt|date('Y-m-d H:i:s') : '' }}</p></div>
+        <div><p>Modified at {{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d H:i:s') : '' }}</p></div>
+        <div class="d-flex flex-row bd-highlight mb-3">
+            {% for category in trick.category %}
+                <div class="px-2"><a href="#" class="px-2 btn btn-info">{{ category.name }}</a></div>
+            {% endfor %}
+        </div>
+        <p>{{ trick.description }}</p>
+
+
+        <h5>Comments :</h5>
+        {% if is_granted('ROLE_USER') %}
+            {{ form_start(form) }}
+            {{ form_row(form.postContent) }}
+            <button class="btn btn btn-primary" type="submit">
+                Publish my comment
+            </button>
+            {{ form_end(form) }}
+        {% endif %}
+        <br>
+        <ul id="post-container" class="list-group">
+            {{ include('trick/_postList_partial.html.twig') }}
+        </ul>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <button id="load-more-posts" data-slug="{{ trick.slug }}" data-offsetpost="{{ offsetpost }}"
+                    class="btn btn-primary my-2">
+                Older comments...
+            </button>
+        </div>
     </div>
-
-    {% endblock %}
+{% endblock %}

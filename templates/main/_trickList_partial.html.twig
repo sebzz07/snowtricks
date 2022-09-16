@@ -13,26 +13,13 @@
 
             <!-- Trick image-->
             {% if trick.pictures[0].pictureLink %}
-            <img class="card-img-top" src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}" alt="{{ trick.pictures[0].pictureName }}"/>
+                <img class="card-img-top" src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}" alt="{{ trick.pictures[0].pictureName }}"/>
             {% else %}
                 <img class="card-img-top" src="{{ asset('assets/heroBanner.jpg') }}" alt="default picture"/>
             {% endif %}
-                <!-- Trick details-->
-            <div class="card-body p-4">
-                <div class="text-center">
-                    <!-- Trick name-->
-                    <h5 class="fw-bolder">{{ trick.name }}</h5>
-                    {% for category in trick.category %}
-                    <p><a href="#" class="btn btn-info">{{ category.name }}</a></p>
-                    {% endfor %}
-                    <p>Created at {{ trick.createdAt|date("m/d/Y") }} </p><br>
-                    <p> Updated at {{ trick.modifiedAt|date("m/d/Y") }}</p>
-                    <p>{{ trick.posts|length }} comment(s) </p><br>
-                </div>
-            </div>
-            <!-- Trick actions-->
-            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ path('app_trick', { 'slug': trick.slug }) }}">See this trick...</a></div>
+            <!-- Trick details-->
+            <div class="card-body p-0 pl-1">
+                    <a class="btn" href="{{ path('app_trick', { 'slug': trick.slug }) }}"><h5 class="fw-bolder">{{ trick.name }}</h5></a>
             </div>
         </div>
 
