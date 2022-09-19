@@ -3,7 +3,6 @@ const $ = require("jquery");
 /*** Load More Posts feature on trick's page ***/
 
 $(document).ready(function () {
-console.log(document.getElementById("load-more-posts"));
 if(document.getElementById("load-more-posts")){
     const loadPostBtn = document.getElementById("load-more-posts");
     let offsetPost = parseInt(loadPostBtn.dataset.offsetpost);

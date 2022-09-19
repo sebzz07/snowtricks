@@ -23,3 +23,4 @@ require('bootstrap');
 import './js/addPicture.js';
 import './js/loadMoreTicks.js';
 import './js/loadMoreComments.js';
+import './js/loadMediaBtn.js'

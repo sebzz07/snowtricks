@@ -14,27 +14,30 @@
     {% endfor %}
 
     <div class="container">
-        <header id="header-image" class="bg-dark d-flex justify-content-center align-items-center"
+        <header id="header-image" class="container bg-dark"
                 style="background-image: url({{ bgImage }}); background-position: center; background-size: cover;">
-            <div>
-                <div class="text-center text-white">
+
+            <div class="row h-100">
+                <div class="col-sm-12 col-lg-3 order-3 order-lg-1 "></div>
+                <div class="col-sm-12 col-lg-6 align-self-center text-center text-white order-2">
                     <h1 class="display-4 fw-bolder"
                         style="text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">{{ trick.name }}</h1>
                 </div>
-                <div id="btn-edition" class="position-absolute btn-outline-dark">
+                <div id="btn-edition"
+                     class="col-sm-12 col-lg-3 my-2 mt-lg-5 align-self-start text-end order-1 order-lg-3">
                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
-                        <a class="btn btn-dark bg-dark text-white" style="font-size: 2rem;"
-                           href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil bi--xl"
-                                                                                          style="font-size: 2rem;"></i></a>
+                        <a class="btn btn-dark text-white m-1 mt-lg-5" style="font-size: 1.5rem;"
+                           href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil bi--md"
+                            ></i></a>
                         {% if trick.publicationStatusTrick == 'Published' %}
-                            <a class="btn btn-dark bg-dark text-white" style="font-size: 2rem;"
+                            <a class="btn btn-dark bg-dark text-white m-1 mt-lg-5" style="font-size: 1.5rem;"
                                href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished', 'originOfRequest': 'app_trick_edit' }) }}"
                                onclick="return confirm('are you sure you want to unpublish this trick ?')"><i
-                                        class="bi bi-trash bi--xl" style="font-size: 2rem;"></i></a>
+                                        class="bi bi-trash bi--md"></i></a>
                         {% else %}
-                            <a class="btn btn-dark bg-dark text-white" style="font-size: 2rem;"
+                            <a class="btn btn-dark bg-dark text-white m-1 mt-lg-5" style="font-size: 1.5rem;"
                                href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published', 'originOfRequest': 'app_trick_edit' }) }}"><i
-                                        class="bi bi-globe bi--xl" style="font-size: 2rem;"></i></a>
+                                        class="bi bi-globe bi--md"></i></a>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -42,8 +45,7 @@
 
         </header>
         <!-- media -->
-
-        <section class="d-flex flex-wrap justify-content-around m-1">
+        <section id="box-media" class="flex-wrap justify-content-around m-1" style="display: none;">
             {% for picture in trick.pictures %}
 
                 <div class="card m-1" style="width: 250px;">
@@ -76,41 +78,27 @@
             {% endfor %}
 
         </section>
-
-        <div><a class="btn btn-outline-dark mt-auto" href="{{ path('app_trick_index') }}">back to list</a>
-        </div>
-        <br>
-        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
-            <div><a class="btn btn-outline-primary mt-auto" href="{{ path('app_trick_edit', {'slug': trick.slug}) }}">edit</a>
+        <div class="row text-center m-3 m-lg-0">
+            <div>
+            <button id="btn-media" class="btn btn-danger">Show medias</button>
             </div>
-            <br>
-            <div>{{ include('trick/_delete_form.html.twig') }}</div>
-        {% endif %}
-        <br>
-
-        <h1>{{ trick.name }}
-            <a class="btn btn-secondary mt-auto mx-1" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i
-                        class="bi bi-pencil"></i></a>
-            {% if trick.publicationStatusTrick == 'Published' %}
-                <a class="btn btn-secondary mt-auto mx-1"
-                   href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished', 'originOfRequest': 'app_trick_edit' }) }}"><i
-                            class="bi bi-trash"></i> Unpublish</a>
-            {% else %}
-                <a class="btn btn-secondary mt-auto mx-1"
-                   href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published', 'originOfRequest': 'app_trick_edit' }) }}"><i
-                            class="bi bi-globe"></i> publish</a>
-            {% endif %}
-        </h1>
-        <div><p>Created at {{ trick.createdAt ? trick.createdAt|date('Y-m-d H:i:s') : '' }}</p></div>
-        <div><p>Modified at {{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d H:i:s') : '' }}</p></div>
-        <div class="d-flex flex-row bd-highlight mb-3">
+        </div>
+        <div class="row"><p>Created: {{ trick.createdAt ? trick.createdAt|date('Y-m-d') : '' }}; Last
+                update: {{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d') : '' }}</p></div>
+        <div class="row d-flex flex-row bd-highlight mb-3">
             {% for category in trick.category %}
                 <div class="px-2"><a href="#" class="px-2 btn btn-info">{{ category.name }}</a></div>
             {% endfor %}
         </div>
-        <p>{{ trick.description }}</p>
+        <div class="row">
+            <h5>Description:</h5>
+        </div>
+        <div class="row"><p>{{ trick.description }}</p></div>
 
-
+        <div class="row text-center">
+            <div><a class="btn btn-outline-dark mt-auto" href="{{ path('app_trick_index') }}">back to list</a>
+            </div>
+        </div>
         <h5>Comments :</h5>
         {% if is_granted('ROLE_USER') %}
             {{ form_start(form) }}
