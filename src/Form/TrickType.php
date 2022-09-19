@@ -18,9 +18,12 @@ class TrickType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('category', CollectionType::class,[
-                'entry_type' => Category::class])
-            ->add('description')
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'multiple' => true,
+                'expanded' => true,
+            ])
+            ->add('description' )
             ->add('pictures', CollectionType::class,[
                 'entry_type' => PictureType::class,
                 'by_reference' => false,

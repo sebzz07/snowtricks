@@ -24,18 +24,18 @@
                         style="text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">{{ trick.name }}</h1>
                 </div>
                 <div id="btn-edition"
-                     class="col-sm-12 col-lg-3 my-2 mt-lg-5 align-self-start text-end order-1 order-lg-3">
+                     class="col-sm-12 col-lg-3 my-2 align-self-start text-end order-1 order-lg-3">
                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
-                        <a class="btn btn-dark text-white m-1 mt-lg-5" style="font-size: 1.5rem;"
+                        <a class="btn btn-dark text-white m-1" style="font-size: 1.5rem;"
                            href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil bi--md"
                             ></i></a>
                         {% if trick.publicationStatusTrick == 'Published' %}
-                            <a class="btn btn-dark bg-dark text-white m-1 mt-lg-5" style="font-size: 1.5rem;"
+                            <a class="btn btn-dark bg-dark text-white m-1" style="font-size: 1.5rem;"
                                href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished', 'originOfRequest': 'app_trick_edit' }) }}"
                                onclick="return confirm('are you sure you want to unpublish this trick ?')"><i
                                         class="bi bi-trash bi--md"></i></a>
                         {% else %}
-                            <a class="btn btn-dark bg-dark text-white m-1 mt-lg-5" style="font-size: 1.5rem;"
+                            <a class="btn btn-dark bg-dark text-white m-1" style="font-size: 1.5rem;"
                                href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published', 'originOfRequest': 'app_trick_edit' }) }}"><i
                                         class="bi bi-globe bi--md"></i></a>
                         {% endif %}
@@ -50,7 +50,7 @@
 
                 <div class="card m-1" style="width: 250px;">
                     <!-- Pictures-->
-                    <img class="card-img-top" style="object-fit: cover;" src="{{ asset('uploads/images/'~picture.pictureLink) }}"
+                    <img class="card-img-top" style="height: 161px; object-fit: cover;" src="{{ asset('uploads/images/'~picture.pictureLink) }}"
                          alt="..."/>
                     <!-- Pictures name-->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -80,20 +80,20 @@
         </section>
         <div class="row text-center m-3 m-lg-0">
             <div>
-            <button id="btn-media" class="btn btn-danger">Show medias</button>
+                <button id="btn-media" class="btn btn-danger">Show medias</button>
             </div>
         </div>
         <div class="row"><p>Created: {{ trick.createdAt ? trick.createdAt|date('Y-m-d') : '' }}; Last
                 update: {{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d') : '' }}</p></div>
+        <div class="row">
+            <h5>Description:</h5>
+        </div>
+        <div class="row"><p>{{ trick.description }}</p></div>
         <div class="row d-flex flex-row bd-highlight mb-3">
             {% for category in trick.category %}
                 <div class="px-2"><a href="#" class="px-2 btn btn-info">{{ category.name }}</a></div>
             {% endfor %}
         </div>
-        <div class="row">
-            <h5>Description:</h5>
-        </div>
-        <div class="row"><p>{{ trick.description }}</p></div>
 
         <div class="row text-center">
             <div><a class="btn btn-outline-dark mt-auto" href="{{ path('app_trick_index') }}">back to list</a>
@@ -104,7 +104,7 @@
             {{ form_start(form) }}
             {{ form_row(form.postContent) }}
             <button class="btn btn btn-primary" type="submit">
-                Publish my comment
+                Leave a comment
             </button>
             {{ form_end(form) }}
         {% endif %}
@@ -115,7 +115,7 @@
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             <button id="load-more-posts" data-slug="{{ trick.slug }}" data-offsetpost="{{ offsetpost }}"
                     class="btn btn-primary my-2">
-                Older comments...
+                Load more
             </button>
         </div>
     </div>

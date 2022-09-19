@@ -124,7 +124,7 @@ class TrickController extends AbstractController
             $pictureCollectionFields = $form->get('pictures');
 
             foreach ($pictureCollectionFields as $pictureField ) {
-                if ($pictureField->getData()->getId() == null) {
+                if ($pictureField->getData()->getFile() != null) {
                     $picture = $pictureField->getData();
                     $pictureFile = $picture->getFile();
                     $originalFilename = pathinfo($pictureFile, PATHINFO_FILENAME);
@@ -173,7 +173,7 @@ class TrickController extends AbstractController
                 'notice',
                 "The trick was updated correctly"
             );
-            return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_trick', ['slug' =>$trick->getSlug()]);
         }
 
         return $this->renderForm('trick/edit.html.twig', [

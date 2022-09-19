@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Category;
 use App\Entity\Pictures;
 use App\Entity\Trick;
 use App\Entity\User;
@@ -56,6 +57,31 @@ class AppFixtures extends Fixture
         // other fixtures can get this object using the UserFixtures::ADMIN_USER_REFERENCE constant
         $this->addReference(self::ADMIN_USER_REFERENCE, $userAdmin);
         $this->addReference(self::USER_USER_REFERENCE, $user);
+
+        $category = new Category();
+        $category->setName("Nose grab")->setSlug("nose-grab");
+        $category->setName("Japan")->setSlug("japan");
+        $category->setName("Seat belt")->setSlug("seat-belt");
+        $category->setName("Truck driver")->setSlug("truck-driver");
+        $category->setName("Rotation")->setSlug("rotation");
+        $category->setName("180")->setSlug("180");
+        $category->setName("360")->setSlug("360");
+        $category->setName("540")->setSlug("540");
+        $category->setName("720")->setSlug("720");
+        $category->setName("900")->setSlug("900");
+        $category->setName("1080")->setSlug("1080");
+        $category->setName("90")->setSlug("90");
+        $category->setName("270")->setSlug("270");
+        $category->setName("450")->setSlug("450");
+        $category->setName("630")->setSlug("630");
+        $category->setName("810")->setSlug("810");
+        $category->setName("Front flips")->setSlug("front-flips");
+        $category->setName("Back flips")->setSlug("back-flips");
+        $category->setName("Slide")->setSlug("slide");
+        $category->setName("Nose slide")->setSlug("nose-slide");
+        $category->setName("Tail slide")->setSlug("tail-slide");
+        $category->setName("One foot tricks")->setSlug("one-foot-tricks");
+        $manager->persist($category);
 
         for ($i = 1; $i <= 50; $i++) {
             $trick = new Trick();
