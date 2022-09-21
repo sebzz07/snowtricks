@@ -8,9 +8,11 @@ use App\Form\PostType;
 use App\Form\TrickType;
 use App\Repository\PostRepository;
 use App\Repository\TrickRepository;
+use App\Service\IDExtractorService;
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\NoReturn;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -115,7 +117,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Trick $trick, TrickRepository $trickRepository,SluggerInterface $slugger): Response
+    public function edit(Request $request, Trick $trick, TrickRepository $trickRepository, SluggerInterface $slugger, IdExtractorService $idExtractorService): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
@@ -149,22 +151,15 @@ class TrickController extends AbstractController
 
                 $videoCollectionFields = $form->get('video');
                 foreach ($videoCollectionFields as $videoField ) {
-                    try {
                         $video = $videoField->getData();
-                    if(str_contains($video->getVideoLink(), "?v=")) {
-                        $videoLink = $video->getVideoLink();
-                        $arrayExplode = explode("=", $videoLink);
-                        if(count($arrayExplode) <=2) {
-                            $NewVideoLink = "https://www.youtube.com/embed/" . $arrayExplode[1];
-                            $video->setVideoLink($NewVideoLink);
+                        $videoLinkID = $idExtractorService-getId($video->getVideoLink());
+                        if( null == $videoLinkID ){
+                            $this->addFlash('error', "the youtube url is not valid");
+                            return new RedirectResponse($request->headers->get('referer'));
                         }
-                    }
-                    } catch (FileException $e) {
-                        // ... handle exception if something happens during conversion link
-                        return $this->redirectToRoute('app_trick_edit', [], Response::HTTP_SEE_OTHER);
-                    }
-                    $video->setTrick($trick);
-                    $video->setUser($this->getUser());
+                        $video->setVideoLink($videoLinkID);
+                        $video->setTrick($trick);
+                        $video->setUser($this->getUser());
                 }
 
 
@@ -183,8 +178,8 @@ class TrickController extends AbstractController
     }
 
     #[NoReturn]
-    #[Route('/{slug}/status/{publicationStatus}/{originOfRequest}', name: 'app_trick_status', methods: ['GET', 'POST'])]
-    public function updateStatus(string $originOfRequest, string $publicationStatus, Trick $trick, TrickRepository $trickRepository): Response
+    #[Route('/{slug}/status/{publicationStatus}', name: 'app_trick_status', methods: ['GET', 'POST'])]
+    public function updateStatus(Request $request, string $publicationStatus, Trick $trick, TrickRepository $trickRepository): Response
     {
         if($publicationStatus == 'Unpublished'){
             $message = 'the trick was unpublished';
@@ -198,8 +193,7 @@ class TrickController extends AbstractController
         );
         $trick->setPublicationStatusTrick($publicationStatus);
         $trickRepository->add($trick, true);
-
-        return $this->redirectToRoute($originOfRequest, [], Response::HTTP_SEE_OTHER);
+        return new RedirectResponse($request->headers->get('referer'));
 
     }
 

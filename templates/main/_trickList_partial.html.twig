@@ -3,23 +3,32 @@
         <div class="card h-100">
             <!-- New badge-->
             {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
-                <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 2.5rem" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil"></i></a>
+                <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 2.5rem"
+                   href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil"></i></a>
                 {% if trick.publicationStatusTrick == 'Published' %}
-                    <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished', 'originOfRequest': 'app_home' }) }}" onclick="return confirm('are you sure you want to unpublish this trick ?')"><i class="bi bi-trash"></i></a>
+                    <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem"
+                       href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}"
+                       onclick="return confirm('are you sure you want to unpublish this trick ?')"><i
+                                class="bi bi-trash"></i></a>
                 {% else %}
-                    <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published', 'originOfRequest': 'app_home' }) }}"><i class="bi bi-globe"></i></a>
+                    <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem"
+                       href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published' }) }}"><i
+                                class="bi bi-globe"></i></a>
                 {% endif %}
             {% endif %}
 
             <!-- Trick image-->
             {% if trick.pictures[0].pictureLink %}
-                <img class="card-img-top" src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}" alt="{{ trick.pictures[0].pictureName }}"/>
+                <img class="card-img-top" style="height: 161px; object-fit: cover;"
+                     src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}"
+                     alt="{{ trick.pictures[0].pictureName }}"/>
             {% else %}
                 <img class="card-img-top" src="{{ asset('assets/heroBanner.jpg') }}" alt="default picture"/>
             {% endif %}
             <!-- Trick details-->
             <div class="card-body p-0 pl-1">
-                    <a class="btn" href="{{ path('app_trick', { 'slug': trick.slug }) }}"><h5 class="fw-bolder">{{ trick.name }}</h5></a>
+                <a class="btn" href="{{ path('app_trick', { 'slug': trick.slug }) }}"><h5
+                            class="fw-bolder">{{ trick.name }}</h5></a>
             </div>
         </div>
 

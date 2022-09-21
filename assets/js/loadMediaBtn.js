@@ -1,28 +1,24 @@
 /*** to display medias feature on trick's page ***/
 
 $(document).ready(function () {
-    if (document.getElementById('box-media')) {
+        if (document.getElementById('box-media')) {
 
-        const box = document.getElementById('box-media');
-        const btn = document.getElementById('btn-media');
-
-        if (window.screen.width > 992) {
-            box.style.display = 'flex';
-            btn.style.display = 'none';
-        }
-        if (window.screen.width <= 992) {
-
+            const box = document.getElementById('box-media');
+            const btn = document.getElementById('btn-media');
             btn.addEventListener('click', function handleClick() {
-                if (box.style.display === 'none') {
-                    box.style.display = 'flex';
+
+
+                console.log(box.classList);
+                if (box.classList.contains("d-none")) {
+                    box.classList.remove("d-none");
 
                     btn.textContent = 'collapse medias';
                 } else {
-                    box.style.display = 'none';
+                    box.classList.add("d-none");
 
                     btn.textContent = 'Show medias';
                 }
             })
         }
     }
-});
+);

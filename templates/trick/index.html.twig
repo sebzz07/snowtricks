@@ -28,9 +28,9 @@
                     <a class="btn btn-secondary" href="{{ path('app_trick', { 'slug': trick.slug }) }}">show</a>
                     <a class="btn btn-secondary" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}">edit</a>
                     {% if trick.publicationStatusTrick == 'Published' %}
-                        <a class="btn btn-secondary"href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished', 'originOfRequest': 'app_trick_index'  }) }}">Unpublish</a>
+                        <a class="btn btn-secondary"href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}">Unpublish</a>
                     {% else %}
-                        <a class="btn btn-secondary" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published', 'originOfRequest': 'app_trick_index'  }) }}">publish</a>
+                        <a class="btn btn-secondary" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published' }) }}">publish</a>
                     {% endif %}
                 </td>
             </tr>

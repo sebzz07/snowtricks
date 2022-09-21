@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,7 +24,7 @@ class TrickType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
             ])
-            ->add('description' )
+            ->add('description', TextareaType::class )
             ->add('pictures', CollectionType::class,[
                 'entry_type' => PictureType::class,
                 'by_reference' => false,
