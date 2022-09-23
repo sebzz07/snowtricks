@@ -3,44 +3,53 @@
 {% block title %}Trick index{% endblock %}
 
 {% block body %}
-    <h1>Trick index</h1>
+    <div class="row justify-content-center">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th  scope="col">Name</th>
-                <th  scope="col">Description</th>
-                <th  scope="col">Publication Status</th>
-                <th  scope="col">Created date</th>
-                <th  scope="col">Modified date</th>
-                <th  scope="col">actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for trick in tricks %}
-            <tr>
-                <td>{{ trick.name }}</td>
-                <td>{{ trick.description|u.truncate(40, '...') }}</td>
-                <td>{{ trick.publicationStatusTrick }}</td>
-                <td>{{ trick.createdAt ? trick.createdAt|date('Y-m-d') : '' }}</td>
-                <td>{{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a class="btn btn-secondary" href="{{ path('app_trick', { 'slug': trick.slug }) }}">show</a>
-                    <a class="btn btn-secondary" href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}">edit</a>
-                    {% if trick.publicationStatusTrick == 'Published' %}
-                        <a class="btn btn-secondary"href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}">Unpublish</a>
+        <div class="col-12 col-lg-11 p-lg-5 shadow bg-white">
+            <h1>Trick index</h1>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Publication Status</th>
+                        <th scope="col">Created date</th>
+                        <th scope="col">Modified date</th>
+                        <th scope="col">actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for trick in tricks %}
+                        <tr>
+                            <td>{{ trick.name }}</td>
+                            <td>{{ trick.description|u.truncate(40, '...') }}</td>
+                            <td>{{ trick.publicationStatusTrick }}</td>
+                            <td>{{ trick.createdAt ? trick.createdAt|date('Y-m-d') : '' }}</td>
+                            <td>{{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d') : '' }}</td>
+                            <td>
+                                <a class="btn btn-secondary mb-1"
+                                   href="{{ path('app_trick', { 'slug': trick.slug }) }}">show</a>
+                                <a class="btn btn-secondary mb-1"
+                                   href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}">edit</a>
+                                {% if trick.publicationStatusTrick == 'Published' %}
+                                    <a class="btn btn-secondary mb-1"
+                                       href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}">Unpublish</a>
+                                {% else %}
+                                    <a class="btn btn-secondary mb-1"
+                                       href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published' }) }}">publish</a>
+                                {% endif %}
+                            </td>
+                        </tr>
                     {% else %}
-                        <a class="btn btn-secondary" href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Published' }) }}">publish</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_trick_new') }}">Create new</a>
+                        <tr>
+                            <td colspan="7">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{{ path('app_trick_new') }}">Create new</a>
+        </div>
+    </div>
 {% endblock %}

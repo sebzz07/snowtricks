@@ -3,9 +3,13 @@
 {% block title %}New Trick{% endblock %}
 
 {% block body %}
-    <h1>Create new Trick</h1>
+    <div class="row justify-content-center">
 
-    {{ include('trick/_form.html.twig') }}
+        <div class="col-12 col-lg-8 p-5 shadow bg-white">
+            <h1>Create new Trick</h1>
+            {{ include('trick/_form.html.twig') }}
 
-    <a class="btn btn-lg btn-primary" href="{{ path('app_trick_index') }}">back to list</a>
+            <a class="btn btn-outline-dark m-2" href="{{ path('app_trick_index') }}">back to list</a>
+        </div>
+    </div>
 {% endblock %}

@@ -42,7 +42,7 @@ class Pictures
         return $this->pictureLink;
     }
 
-    public function setPictureLink(string $pictureLink): self
+    public function setPictureLink(string $pictureLink = "default.jpg"): self
     {
         $this->pictureLink = $pictureLink;
 

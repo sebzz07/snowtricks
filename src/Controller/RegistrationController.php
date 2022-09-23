@@ -41,6 +41,7 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            $user->setLinkUserPicture('default.jpg');
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -54,13 +55,13 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
-
+            $this->addFlash(
+                'notice',
+                "Congratulation! Your account was created, Check your email box to validate your account"
+            );
             return $this->redirectToRoute('app_login');
         }
-        $this->addFlash(
-            'notice',
-            "Congratulation! Your account was created, Check your email box to validate your account"
-        );
+
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);

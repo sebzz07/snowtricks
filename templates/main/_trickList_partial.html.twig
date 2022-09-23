@@ -1,6 +1,6 @@
 {% for trick in tricks %}
     <div class="col mb-5">
-        <div class="card h-100">
+        <div class="card h-100 shadow p-2 bg-white rounded">
             <!-- New badge-->
             {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
                 <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 2.5rem"
@@ -18,16 +18,18 @@
             {% endif %}
 
             <!-- Trick image-->
-            {% if trick.pictures[0].pictureLink %}
-                <img class="card-img-top" style="height: 161px; object-fit: cover;"
-                     src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}"
-                     alt="{{ trick.pictures[0].pictureName }}"/>
-            {% else %}
-                <img class="card-img-top" src="{{ asset('assets/heroBanner.jpg') }}" alt="default picture"/>
-            {% endif %}
+            <a href="{{ path('app_trick', { 'slug': trick.slug }) }}">
+                {% if trick.pictures[0].pictureLink %}
+                    <img class="card-img-top" style="height: 190px; object-fit: cover;"
+                         src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}"
+                         alt="{{ trick.pictures[0].pictureName }}"/>
+                {% else %}
+                    <img class="card-img-top" src="{{ asset('assets/heroBanner.jpg') }}" alt="default picture"/>
+                {% endif %}
+            </a>
             <!-- Trick details-->
-            <div class="card-body p-0 pl-1">
-                <a class="btn" href="{{ path('app_trick', { 'slug': trick.slug }) }}"><h5
+            <div class="card-body p-0 align-self-center">
+                <a class="btn btn-light py-2" style="width:250px; " href="{{ path('app_trick', { 'slug': trick.slug }) }}"><h5
                             class="fw-bolder">{{ trick.name }}</h5></a>
             </div>
         </div>

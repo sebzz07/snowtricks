@@ -3,22 +3,18 @@
 {% block title %}Hello {{ app.user.username }}{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-3">
-            <div class="d-flex flex-column mb-3">
-                <div class="p-2"><a href="{{ path('app_home') }}">My Profile</a></div>
-                <div class="p-2"><a href="{{ path('app_home') }}">My Tricks</a></div>
-            </div>
+    <div class="row justify-content-center m-2 mt-4 mt-lg-1" style="height: 90vh;">
+        <div class="col-12 col-lg-2 justify-content-center text-center text-lg-left">
+            <h5>My Picture</h5>
+            <img class="" style="height: 150px; width: 150px; border-radius: 100%; text-align: center; object-fit: cover;"
+                 src="{{ asset('uploads/profiles/'~app.user.linkUserPicture) }}"
+                 alt="..."/>
         </div>
-        <div class="col">
-            {% for flash_successful in app.flashes('success') %}
-                <div class="alert alert-success" role="alert">{{ flash_successful }}</div>
-            {% endfor %}
-            {{ form(form) }}
+        <div class="col-12 col-lg-8 text-center text-lg-left">
             <h1>{{ app.user.username }} Profile</h1>
             <p>Full name : <span>{{ app.user.fullName }}</span></p>
-            <p>Profile's picture : <span>{{ app.user.linkUserPicture }}</span></p>
             <p>Email : <span>{{ app.user.email }}</span></p>
+            {{ form(form) }}
         </div>
     </div>
 {% endblock %}

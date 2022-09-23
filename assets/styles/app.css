@@ -33,6 +33,9 @@ a:hover {
 #header-image{
     height: 50vh;
 }
+#trick_category>.form-check{
+    margin-right: 20px;
+}
 
 /* bottom to top menu responsive */
 @media (min-width: 992px) {

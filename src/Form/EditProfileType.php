@@ -7,6 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 
 class EditProfileType extends AbstractType
 {
@@ -15,9 +17,21 @@ class EditProfileType extends AbstractType
         $builder
             ->add('email')
             ->add('fullName')
-            ->add('linkUserPicture')
-            ->add('Modify', SubmitType::class)
-        ;
+            ->add('profilePicture', FileType::class, [
+                'label' => 'Picture of your profile (jpg file)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2048k',
+                        'mimeTypes' => [
+                            'image/jpeg'
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid Jpg file',
+                    ])
+                ],
+            ])
+            ->add('Modify', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

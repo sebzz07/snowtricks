@@ -19,7 +19,7 @@ class CategoryController extends AbstractController
     #[Route('/', name: 'index')]
     public function indexCategory(CategoryRepository $categoryRepository): Response
     {
-        return $this->render('admin/category/index.html.twig', [
+        return $this->render('category/index.html.twig', [
             'categories' => $categoryRepository->findAll()
         ]);
     }
@@ -41,7 +41,7 @@ class CategoryController extends AbstractController
             return $this->redirectToRoute('app_category_index');
         };
 
-        return $this->render('admin/category/add.html.twig', [
+        return $this->render('category/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
