@@ -17,12 +17,12 @@
                         style=" padding:0; margin:-0.7rem ; font-size: 3rem;"></i></a></div>
     </header>
     <!-- Section-->
-    <section class="container py-5 px-4 px-lg-5 mt-5">
-        <div id="trick-container" class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-start">
+    <section class="d-flex flex-column m-4">
+        <div id="trick-container" class="d-flex flex-wrap justify-content-center">
             {{ include('main/_trickList_partial.html.twig') }}
             </div>
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <button id="load-more" data-offset="{{ offset }}" class="btn btn-primary">
+            <div class="text-center">
+                <button id="load-more" data-offset="{{ offset }}" class="btn btn-primary px-5">
                     Load more
                 </button>
             </div>

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile')]
+    #[IsGranted('ROLE_USER')]
     public function index(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $user = $this->getUser();

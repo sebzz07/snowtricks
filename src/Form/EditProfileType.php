@@ -18,16 +18,17 @@ class EditProfileType extends AbstractType
             ->add('email')
             ->add('fullName')
             ->add('profilePicture', FileType::class, [
-                'label' => 'Picture of your profile (jpg file)',
+                'label' => 'Picture of your profile (jpg or png file)',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '2048k',
                         'mimeTypes' => [
-                            'image/jpeg'
+                            'image/jpeg',
+                            'image/png'
                         ],
-                        'mimeTypesMessage' => 'Please upload a valid Jpg file',
+                        'mimeTypesMessage' => 'Please upload a valid jpg or png file type',
                     ])
                 ],
             ])

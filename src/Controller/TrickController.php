@@ -29,6 +29,7 @@ class TrickController extends AbstractController
      * @return Response
      */
     #[Route('/', name: 'app_trick_index', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function index(TrickRepository $trickRepository): Response
     {
         return $this->render('trick/index.html.twig', [
@@ -37,6 +38,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function new(Request $request, TrickRepository $trickRepository,SluggerInterface $slugger): Response
     {
         $trick = new Trick();
@@ -86,6 +88,7 @@ class TrickController extends AbstractController
 
     /**
      * @param Trick $trick
+     * @param PostRepository $postRepository
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return Response
@@ -94,19 +97,24 @@ class TrickController extends AbstractController
     public function read(Trick $trick, PostRepository $postRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $post = new Post();
-        $form = $this->createForm(PostType::class,$post)->handleRequest($request);
+        $form = $this->createForm(PostType::class, $post)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $post->setUser($this->getUser())
-                ->setTrick($trick);
-            $entityManager->persist($post);
-            $entityManager->flush();
-            $this->addFlash('success', 'Your comment has been published.');
-            return $this->redirectToRoute('app_trick', ['slug' =>$trick->getSlug()]);
+            if (null != $this->getUser()) {
+                $post->setUser($this->getUser())
+                    ->setTrick($trick);
+                $entityManager->persist($post);
+                $entityManager->flush();
+                $this->addFlash('success', 'Your comment has been published.');
+                return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
+
+            } else {
+                $this->addFlash('error', 'You need to be login to write a comment');
+                return new RedirectResponse($request->headers->get('referer'));
+            }
         };
 
-
-        $posts = $postRepository->findBy(['trick'=> $trick],['created_at' => 'DESC'], 5, 0);
+        $posts = $postRepository->findBy(['trick' => $trick], ['created_at' => 'DESC'], 5, 0);
 
         return $this->render('trick/trick.html.twig', [
             'trick' => $trick,

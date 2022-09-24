@@ -2,7 +2,7 @@
 
     <li class="list-group-item"><small><img class=""
                                             style="height: 50px; width: 50px; border-radius: 100%; text-align: center; object-fit: cover;"
-                                            src="{{ asset('uploads/profiles/'~app.user.linkUserPicture) }}"
+                                            src="{{ asset('uploads/profiles/'~post.user.linkUserPicture) }}"
                                             alt="..."/>{{ post.user }} - {{ post.createdAt|date("m/d/Y") }}
             </small><br>{{ post.postContent }}</li>
 

@@ -1,12 +1,12 @@
 {% for trick in tricks %}
-    <div class="col mb-5">
-        <div class="card h-100 shadow p-2 bg-white rounded">
+    <div class="m-3">
+        <div class="card h-100 shadow p-2 bg-white rounded-lg" style="width: 208px;">
             <!-- New badge-->
             {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
-                <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 2.5rem"
+                <a class="badge bg-dark text-white position-absolute" style="top: 0.6rem; right: 2.6rem"
                    href="{{ path('app_trick_edit', { 'slug': trick.slug }) }}"><i class="bi bi-pencil"></i></a>
                 {% if trick.publicationStatusTrick == 'Published' %}
-                    <a class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem"
+                    <a class="badge bg-dark text-white position-absolute" style="top: 0.6rem; right: 0.6rem"
                        href="{{ path('app_trick_status', { 'slug': trick.slug,'publicationStatus': 'Unpublished' }) }}"
                        onclick="return confirm('are you sure you want to unpublish this trick ?')"><i
                                 class="bi bi-trash"></i></a>
@@ -20,7 +20,7 @@
             <!-- Trick image-->
             <a href="{{ path('app_trick', { 'slug': trick.slug }) }}">
                 {% if trick.pictures[0].pictureLink %}
-                    <img class="card-img-top" style="height: 190px; object-fit: cover;"
+                    <img class="card-img-top border" style="height: 190px; object-fit: cover;"
                          src="{{ asset('uploads/images/'~trick.pictures[0].pictureLink) }}"
                          alt="{{ trick.pictures[0].pictureName }}"/>
                 {% else %}
@@ -28,10 +28,11 @@
                 {% endif %}
             </a>
             <!-- Trick details-->
-            <div class="card-body p-0 align-self-center">
-                <a class="btn btn-light py-2" style="width:250px; " href="{{ path('app_trick', { 'slug': trick.slug }) }}"><h5
-                            class="fw-bolder">{{ trick.name }}</h5></a>
-            </div>
+            <a href="{{ path('app_trick', { 'slug': trick.slug }) }}">
+                <div class="card-body p-0 align-self-center text-center" style="width:190px;">
+                    <h5 class="my-3 card-link fw-bolder">{{ trick.name }}</h5>
+                </div>
+            </a>
         </div>
 
     </div>

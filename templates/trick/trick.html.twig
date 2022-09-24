@@ -46,17 +46,17 @@
         </header>
         <!-- media -->
 
-        <section id="box-media" class="d-none d-lg-flex flex-wrap justify-content-around m-1">
+        <section id="box-media" class="d-none d-lg-flex flex-wrap justify-content-around align-items-center m-1">
             {% for picture in trick.pictures %}
 
-                <div class="card m-1" style="width: 250px;">
+                <div class="card m-1 p-2 rounded-lg" style="width: 250px;">
                     <!-- Pictures-->
                     <img class="card-img-top" style="height: 161px; object-fit: cover;"
                          src="{{ asset('uploads/images/'~picture.pictureLink) }}"
                          alt="..."/>
                     <!-- Pictures name-->
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center">{{ picture.pictureName }}</div>
+                    <div class="card-footer p-2 pt-0 border-top-0 bg-transparent">
+                        <p class="text-center">{{ picture.pictureName }}</p>
                     </div>
                 </div>
 
@@ -84,18 +84,20 @@
                 <button id="btn-media" class="d-lg-none btn btn-danger">Show medias</button>
             </div>
         </div>
+        <div class="container p-2 m-2 shadow border bg-white">
         <div class="row"><p>Created: {{ trick.createdAt ? trick.createdAt|date('Y-m-d') : '' }}; Last
                 update: {{ trick.modifiedAt ? trick.modifiedAt|date('Y-m-d') : '' }}</p></div>
         <div class="row">
-            <h5>Description:</h5>
+            <h5>Description :</h5>
         </div>
         <div class="row"><p>{{ trick.description }}</p></div>
-        <div class="row d-flex flex-row bd-highlight mb-3">
+        <div class="d-flex flex-wrap bd-highlight mb-3">
+            <h5>Category :</h5>
             {% for category in trick.category %}
-                <div class="px-2"><a href="#" class="px-2 btn btn-info">{{ category.name }}</a></div>
+                <div class="mx-4 px-3 py-1 border-info shadow bg-light ">{{ category.name }}</div>
             {% endfor %}
         </div>
-
+        </div>
         <div class="row text-center">
             <div><a class="btn btn-outline-dark mt-auto" href="{{ path('app_trick_index') }}">back to list</a>
             </div>

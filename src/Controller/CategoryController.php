@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/category', name: 'app_category_')]
+#[IsGranted('ROLE_USER')]
 class CategoryController extends AbstractController
 {
 
@@ -38,7 +39,7 @@ class CategoryController extends AbstractController
             $entityManager->persist($category);
             $entityManager->flush();
             $this->addFlash('success', 'Your category has been created.');
-            return $this->redirectToRoute('app_category_index');
+            return $this->redirectToRoute('app_category_add');
         };
 
         return $this->render('category/add.html.twig', [
