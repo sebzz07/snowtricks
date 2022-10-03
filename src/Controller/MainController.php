@@ -26,7 +26,6 @@ class MainController extends AbstractController
             $criteria = ['publicationStatusTrick' => 'Published' ];
         }
 
-
         return $this->render('main/index.html.twig', [
             'tricks' => $tricks->findBy($criteria,['created_at' => 'ASC'],8,0),
             'offset' => 8
@@ -41,16 +40,12 @@ class MainController extends AbstractController
     #[Route('/nextTricks/{offset}', name: 'app_loadMore')]
     public function loadMoreTricks(TrickRepository $tricks, $offset): Response
     {
+        $criteria = [];
         if ($this->getUser() !== null){
             $criteria = ['publicationStatusTrick' => 'Published' ];
-        }else{
-            $criteria = [];
         }
         return $this->render('main/_trickList_partial.html.twig', [
             'tricks' => $tricks->findBy($criteria,['created_at' => 'ASC'],8,$offset)
         ]);
-
-
     }
-
 }

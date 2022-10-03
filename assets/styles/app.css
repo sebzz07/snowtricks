@@ -4,7 +4,7 @@
 body {
     background-color: lightgray;
 }
-a{
+a {
     color: #000000;
     text-decoration: none;
 
@@ -30,10 +30,10 @@ a:hover {
     top: 1rem;
     right: 3rem;
 }
-#header-image{
+#header-image {
     height: 50vh;
 }
-#trick_category>.form-check{
+#trick_category > .form-check {
     margin-right: 20px;
 }
 
@@ -55,7 +55,7 @@ a:hover {
         top: 5rem;
         right: 10rem;
     }
-    #header-image{
+    #header-image {
         height: 70vh;
     }
 }
