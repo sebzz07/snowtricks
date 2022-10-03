@@ -21,10 +21,9 @@ class MainController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(TrickRepository $tricks): Response
     {
+        $criteria = [];
         if ($this->getUser() !== null){
             $criteria = ['publicationStatusTrick' => 'Published' ];
-        }else{
-            $criteria = [];
         }
 
 

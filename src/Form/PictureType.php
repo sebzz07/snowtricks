@@ -16,7 +16,7 @@ class PictureType extends AbstractType
     {
         $builder
             ->add('file', FileType::class,[
-                'label' => "Pictures to upload",
+                'label' => "Upload a Picture",
                 'multiple' => false,
                 'mapped' => true,
                 'required' => false,
@@ -26,7 +26,7 @@ class PictureType extends AbstractType
                         'mimeTypes' => [
                             'image/jpeg',
                         ],
-                        'mimeTypesMessage' => 'Please upload a valid Pictures (jpg, jpeg)',
+                        'mimeTypesMessage' => 'Please upload a valid Picture (jpg, jpeg)',
                     ])
             ]])
             ->add('pictureName',TextType::class)

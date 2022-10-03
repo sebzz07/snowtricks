@@ -8,9 +8,10 @@ use App\Form\PostType;
 use App\Form\TrickType;
 use App\Repository\PostRepository;
 use App\Repository\TrickRepository;
-use App\Service\IDExtractorService;
+use App\Service\IdExtractorService;
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\NoReturn;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use function PHPUnit\Framework\isNull;
-use function PHPUnit\Framework\throwException;
 
 #[Route('/trick')]
 class TrickController extends AbstractController
@@ -64,7 +63,7 @@ class TrickController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+                    $this->addFlash('error', $e);
                     return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
                 }
 
@@ -73,10 +72,17 @@ class TrickController extends AbstractController
                 $picture->setUser($this->getUser());
             }
 
+            $videosFields = $form->get('video');
+            foreach ($videosFields as $videoField ) {
+                $video = $videoField->getData();
+                $video->setUser($this->getUser());
+            }
+
             $trick->setSlug($slugger->slug($trick->getName()));
             $trick->setUser($this->getUser());
 
             $trickRepository->add($trick, true);
+            $this->addFlash('success', "Your trick has been created! (Don't forget to publish it)");
             return $this->redirectToRoute('app_trick_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -100,19 +106,18 @@ class TrickController extends AbstractController
         $form = $this->createForm(PostType::class, $post)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (null != $this->getUser()) {
-                $post->setUser($this->getUser())
-                    ->setTrick($trick);
-                $entityManager->persist($post);
-                $entityManager->flush();
-                $this->addFlash('success', 'Your comment has been published.');
-                return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
-
-            } else {
+            if (null === $this->getUser()) {
                 $this->addFlash('error', 'You need to be login to write a comment');
                 return new RedirectResponse($request->headers->get('referer'));
+
             }
-        };
+            $post->setUser($this->getUser())
+                ->setTrick($trick);
+            $entityManager->persist($post);
+            $entityManager->flush();
+            $this->addFlash('success', 'Your comment has been published.');
+            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
+        }
 
         $posts = $postRepository->findBy(['trick' => $trick], ['created_at' => 'DESC'], 5, 0);
 
@@ -147,7 +152,7 @@ class TrickController extends AbstractController
                             $newFilename
                         );
                     } catch (FileException $e) {
-                        // ... handle exception if something happens during file upload
+                        $this->addFlash('error', $e);
                         return $this->redirectToRoute('app_trick_edit', [], Response::HTTP_SEE_OTHER);
                     }
 
@@ -160,11 +165,24 @@ class TrickController extends AbstractController
                 $videoCollectionFields = $form->get('video');
                 foreach ($videoCollectionFields as $videoField ) {
                         $video = $videoField->getData();
-                        $videoLinkID = $idExtractorService-getId($video->getVideoLink());
-                        if( null == $videoLinkID ){
-                            $this->addFlash('error', "the youtube url is not valid");
-                            return new RedirectResponse($request->headers->get('referer'));
+                        $videoLink = $video->getVideoLink();
+
+                        if (strlen($videoLink) !== 11){
+                            $videoLinkID = $idExtractorService->getId($videoLink);
+                            if (null == $videoLinkID){
+                                $this->addFlash('error', "the youtube url is not valid");
+                                return new RedirectResponse($request->headers->get('referer'));
+                            }
+                        } else {
+                            $regExp = "/(\\w|-|_)+/";
+                            preg_match($regExp, $videoLink, $matches);
+                            if (!$matches ) {
+                                $this->addFlash('error', "the youtube ID is not valid");
+                                return new RedirectResponse($request->headers->get('referer'));
+                            }
+                            $videoLinkID = $videoLink;
                         }
+
                         $video->setVideoLink($videoLinkID);
                         $video->setTrick($trick);
                         $video->setUser($this->getUser());
@@ -174,7 +192,7 @@ class TrickController extends AbstractController
             $trickRepository->add($trick, true);
             $this->addFlash(
                 'notice',
-                "The trick was updated correctly"
+                "The trick was updated correctly (Don't forget to publish it)"
             );
             return $this->redirectToRoute('app_trick', ['slug' =>$trick->getSlug()]);
         }
@@ -206,9 +224,9 @@ class TrickController extends AbstractController
     }
 
     /**
+     * @param PostRepository $postRepository
      * @param Trick $trick
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
+     * @param int $offsetPost
      * @return Response
      */
     #[Route('/{slug}/nextposts/{offsetPost}', name: 'app_post_loadMore', methods: ['GET', 'POST'])]

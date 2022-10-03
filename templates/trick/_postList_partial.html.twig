@@ -3,7 +3,8 @@
     <li class="list-group-item"><small><img class=""
                                             style="height: 50px; width: 50px; border-radius: 100%; text-align: center; object-fit: cover;"
                                             src="{{ asset('uploads/profiles/'~post.user.linkUserPicture) }}"
-                                            alt="..."/>{{ post.user }} - {{ post.createdAt|date("m/d/Y") }}
-            </small><br>{{ post.postContent }}</li>
+                                            alt="..."/></small>
+        <p style="display: inline-block">{{ post.user }} - {{ post.createdAt|date("m/d/Y") }}</p>
+        <br>{{ post.postContent }}</li>
 
 {% endfor %}
