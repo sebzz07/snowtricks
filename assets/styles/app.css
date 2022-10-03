@@ -1,63 +1,51 @@
 @import "~bootstrap";
-@import '~bootstrap-icons';
+@import "~bootstrap-icons";
 
 body {
     background-color: lightgray;
 }
-
 a {
     color: #000000;
     text-decoration: none;
 }
-
 a:hover {
     text-decoration: none;
     color: #959595;
 }
-
 #btn-drop-section {
     position: absolute;
     bottom: 4rem;
     right: 2rem;
 }
-
 #footer {
     height: 15vh;
 }
-
 #btn-edition {
     top: 1rem;
     right: 3rem;
 }
-
 #header-image {
     height: 50vh;
 }
-
 #trick_category > .form-check {
     margin-right: 20px;
 }
-
 /* bottom to top menu responsive */
 @media (min-width: 992px) {
     .fixed-bottom {
         bottom: inherit;
         top: 0;
     }
-
     #btn-drop-section {
         bottom: 2rem;
     }
-
     #footer {
         height: 8vh;
     }
-
     #btn-edition {
         top: 5rem;
         right: 10rem;
     }
-
     #header-image {
         height: 70vh;
     }
