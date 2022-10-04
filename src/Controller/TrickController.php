@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Entity\Trick;
+use App\Entity\User;
 use App\Form\PostType;
 use App\Form\TrickType;
 use App\Repository\PostRepository;
@@ -11,6 +12,7 @@ use App\Repository\TrickRepository;
 use App\Service\IdExtractorService;
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\NoReturn;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -77,9 +79,10 @@ class TrickController extends AbstractController
                 $video = $videoField->getData();
                 $video->setUser($this->getUser());
             }
-
+            /** @var User $user */
+            $user = $this->getUser();
             $trick->setSlug($slugger->slug($trick->getName()));
-            $trick->setUser($this->getUser());
+            $trick->setUser($user);
 
             $trickRepository->add($trick, true);
             $this->addFlash('success', "Your trick has been created! (Don't forget to publish it)");
@@ -111,7 +114,9 @@ class TrickController extends AbstractController
                 return new RedirectResponse($request->headers->get('referer'));
 
             }
-            $post->setUser($this->getUser())
+            /** @var User $user */
+            $user = $this->getUser();
+            $post->setUser($user)
                 ->setTrick($trick);
             $entityManager->persist($post);
             $entityManager->flush();
@@ -130,7 +135,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Trick $trick, TrickRepository $trickRepository, SluggerInterface $slugger, IdExtractorService $idExtractorService): Response
+    public function edit(Request $request, Trick $trick, TrickRepository $trickRepository, SluggerInterface $slugger, IdExtractorService $idExtractorService, LoggerInterface $logger): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
@@ -152,13 +157,16 @@ class TrickController extends AbstractController
                             $newFilename
                         );
                     } catch (FileException $e) {
-                        $this->addFlash('error', $e);
+                        $logger->error($e->getMessage());
+                        $this->addFlash('error', "Fail to upload picture");
                         return $this->redirectToRoute('app_trick_edit', [], Response::HTTP_SEE_OTHER);
                     }
 
                     $picture->setPictureLink($newFilename);
                     $picture->setTrick($trick);
-                    $picture->setUser($this->getUser());
+                    /** @var User $user */
+                    $user = $this->getUser();
+                    $picture->setUser($user);
                 }
             }
 
