@@ -18,8 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use function PHPUnit\Framework\isNull;
-use function PHPUnit\Framework\throwException;
 
 #[Route('/trick')]
 class TrickController extends AbstractController
@@ -39,7 +37,7 @@ class TrickController extends AbstractController
 
     #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, TrickRepository $trickRepository,SluggerInterface $slugger): Response
+    public function new(Request $request, TrickRepository $trickRepository, SluggerInterface $slugger): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -50,15 +48,15 @@ class TrickController extends AbstractController
 
             $pictureCollectionFields = $form->get('pictures');
 
-            foreach ($pictureCollectionFields as $pictureField ) {
+            foreach ($pictureCollectionFields as $pictureField) {
 
                 $picture = $pictureField->getData();
-                $pictureFile= $picture->getFile();
-                $originalFilename = pathinfo($pictureFile , PATHINFO_FILENAME);
+                $pictureFile = $picture->getFile();
+                $originalFilename = pathinfo($pictureFile, PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $pictureFile->guessExtension();
 
-                try{
+                try {
                     $pictureFile->move(
                         $this->getParameter('Pictures_directory'),
                         $newFilename
@@ -100,18 +98,18 @@ class TrickController extends AbstractController
         $form = $this->createForm(PostType::class, $post)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (null != $this->getUser()) {
-                $post->setUser($this->getUser())
-                    ->setTrick($trick);
-                $entityManager->persist($post);
-                $entityManager->flush();
-                $this->addFlash('success', 'Your comment has been published.');
-                return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
-
-            } else {
+            if (null === $this->getUser()) {
                 $this->addFlash('error', 'You need to be login to write a comment');
                 return new RedirectResponse($request->headers->get('referer'));
             }
+
+            $post->setUser($this->getUser())
+                ->setTrick($trick);
+            $entityManager->persist($post);
+            $entityManager->flush();
+            $this->addFlash('success', 'Your comment has been published.');
+            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
+
         };
 
         $posts = $postRepository->findBy(['trick' => $trick], ['created_at' => 'DESC'], 5, 0);
@@ -133,7 +131,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $pictureCollectionFields = $form->get('pictures');
 
-            foreach ($pictureCollectionFields as $pictureField ) {
+            foreach ($pictureCollectionFields as $pictureField) {
                 if ($pictureField->getData()->getFile() != null) {
                     $picture = $pictureField->getData();
                     $pictureFile = $picture->getFile();
@@ -157,18 +155,18 @@ class TrickController extends AbstractController
                 }
             }
 
-                $videoCollectionFields = $form->get('video');
-                foreach ($videoCollectionFields as $videoField ) {
-                        $video = $videoField->getData();
-                        $videoLinkID = $idExtractorService-getId($video->getVideoLink());
-                        if( null == $videoLinkID ){
-                            $this->addFlash('error', "the youtube url is not valid");
-                            return new RedirectResponse($request->headers->get('referer'));
-                        }
-                        $video->setVideoLink($videoLinkID);
-                        $video->setTrick($trick);
-                        $video->setUser($this->getUser());
+            $videoCollectionFields = $form->get('video');
+            foreach ($videoCollectionFields as $videoField) {
+                $video = $videoField->getData();
+                $videoLinkID = $idExtractorService - getId($video->getVideoLink());
+                if (null == $videoLinkID) {
+                    $this->addFlash('error', "the youtube url is not valid");
+                    return new RedirectResponse($request->headers->get('referer'));
                 }
+                $video->setVideoLink($videoLinkID);
+                $video->setTrick($trick);
+                $video->setUser($this->getUser());
+            }
 
 
             $trickRepository->add($trick, true);
@@ -176,7 +174,7 @@ class TrickController extends AbstractController
                 'notice',
                 "The trick was updated correctly"
             );
-            return $this->redirectToRoute('app_trick', ['slug' =>$trick->getSlug()]);
+            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
         }
 
         return $this->renderForm('trick/edit.html.twig', [
@@ -189,7 +187,7 @@ class TrickController extends AbstractController
     #[Route('/{slug}/status/{publicationStatus}', name: 'app_trick_status', methods: ['GET', 'POST'])]
     public function updateStatus(Request $request, string $publicationStatus, Trick $trick, TrickRepository $trickRepository): Response
     {
-        if($publicationStatus == 'Unpublished'){
+        if ($publicationStatus == 'Unpublished') {
             $message = 'the trick was unpublished';
         } else {
             $message = 'the trick was published';
@@ -212,10 +210,10 @@ class TrickController extends AbstractController
      * @return Response
      */
     #[Route('/{slug}/nextposts/{offsetPost}', name: 'app_post_loadMore', methods: ['GET', 'POST'])]
-    public function loadMorePosts(PostRepository $postRepository,Trick $trick, int $offsetPost): Response
+    public function loadMorePosts(PostRepository $postRepository, Trick $trick, int $offsetPost): Response
     {
 
-        $posts = $postRepository->findBy(['trick'=> $trick],['created_at' => 'DESC'], 5, $offsetPost);
+        $posts = $postRepository->findBy(['trick' => $trick], ['created_at' => 'DESC'], 5, $offsetPost);
 
         return $this->render('trick/_postList_partial.html.twig', [
             'posts' => $posts

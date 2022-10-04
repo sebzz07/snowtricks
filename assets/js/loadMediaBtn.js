@@ -16,7 +16,7 @@ $(document).ready(function () {
                 } else {
                     box.classList.add("d-none");
                     box.classList.remove("d-flex");
-                    btn.textContent = 'Show medias';
+                    btn.textContent = "Show medias";
                 }
             })
         }
