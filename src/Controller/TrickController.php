@@ -38,7 +38,7 @@ class TrickController extends AbstractController
 
     #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, TrickRepository $trickRepository,SluggerInterface $slugger): Response
+    public function new(Request $request, TrickRepository $trickRepository, SluggerInterface $slugger): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -49,15 +49,15 @@ class TrickController extends AbstractController
 
             $pictureCollectionFields = $form->get('pictures');
 
-            foreach ($pictureCollectionFields as $pictureField ) {
+            foreach ($pictureCollectionFields as $pictureField) {
 
                 $picture = $pictureField->getData();
-                $pictureFile= $picture->getFile();
-                $originalFilename = pathinfo($pictureFile , PATHINFO_FILENAME);
+                $pictureFile = $picture->getFile();
+                $originalFilename = pathinfo($pictureFile, PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $pictureFile->guessExtension();
 
-                try{
+                try {
                     $pictureFile->move(
                         $this->getParameter('Pictures_directory'),
                         $newFilename
@@ -138,7 +138,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $pictureCollectionFields = $form->get('pictures');
 
-            foreach ($pictureCollectionFields as $pictureField ) {
+            foreach ($pictureCollectionFields as $pictureField) {
                 if ($pictureField->getData()->getFile() != null) {
                     $picture = $pictureField->getData();
                     $pictureFile = $picture->getFile();
@@ -194,7 +194,7 @@ class TrickController extends AbstractController
                 'notice',
                 "The trick was updated correctly (Don't forget to publish it)"
             );
-            return $this->redirectToRoute('app_trick', ['slug' =>$trick->getSlug()]);
+            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
         }
 
         return $this->renderForm('trick/edit.html.twig', [
@@ -207,7 +207,7 @@ class TrickController extends AbstractController
     #[Route('/{slug}/status/{publicationStatus}', name: 'app_trick_status', methods: ['GET', 'POST'])]
     public function updateStatus(Request $request, string $publicationStatus, Trick $trick, TrickRepository $trickRepository): Response
     {
-        if($publicationStatus == 'Unpublished'){
+        if ($publicationStatus == 'Unpublished') {
             $message = 'the trick was unpublished';
         } else {
             $message = 'the trick was published';
@@ -230,10 +230,10 @@ class TrickController extends AbstractController
      * @return Response
      */
     #[Route('/{slug}/nextposts/{offsetPost}', name: 'app_post_loadMore', methods: ['GET', 'POST'])]
-    public function loadMorePosts(PostRepository $postRepository,Trick $trick, int $offsetPost): Response
+    public function loadMorePosts(PostRepository $postRepository, Trick $trick, int $offsetPost): Response
     {
 
-        $posts = $postRepository->findBy(['trick'=> $trick],['created_at' => 'DESC'], 5, $offsetPost);
+        $posts = $postRepository->findBy(['trick' => $trick], ['created_at' => 'DESC'], 5, $offsetPost);
 
         return $this->render('trick/_postList_partial.html.twig', [
             'posts' => $posts
