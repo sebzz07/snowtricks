@@ -196,7 +196,7 @@ class TrickController extends AbstractController
                         $video->setUser($this->getUser());
                 }
 
-
+            $trick->setPublicationStatusTrick('Unpublished');
             $trickRepository->add($trick, true);
             $this->addFlash(
                 'notice',
