@@ -9,7 +9,7 @@ use App\Form\PostType;
 use App\Form\TrickType;
 use App\Repository\PostRepository;
 use App\Repository\TrickRepository;
-use App\Service\IdExtractorService;
+use App\Service\FilterYoutubeUrlService;
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\NoReturn;
 use Psr\Log\LoggerInterface;
@@ -40,7 +40,7 @@ class TrickController extends AbstractController
 
     #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, TrickRepository $trickRepository, SluggerInterface $slugger): Response
+    public function new(Request $request, TrickRepository $trickRepository, SluggerInterface $slugger, FilterYoutubeUrlService $filterVideoLink): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -52,7 +52,6 @@ class TrickController extends AbstractController
             $pictureCollectionFields = $form->get('pictures');
 
             foreach ($pictureCollectionFields as $pictureField) {
-
                 $picture = $pictureField->getData();
                 $pictureFile = $picture->getFile();
                 $originalFilename = pathinfo($pictureFile, PATHINFO_FILENAME);
@@ -74,11 +73,23 @@ class TrickController extends AbstractController
                 $picture->setUser($this->getUser());
             }
 
-            $videosFields = $form->get('video');
-            foreach ($videosFields as $videoField ) {
+            $videoCollectionFields = $form->get('video');
+
+            foreach ($videoCollectionFields as $videoField) {
                 $video = $videoField->getData();
+                $videoLink = $video->getVideoLink();
+                $filterVideoLink->filterVideoLink($videoLink);
+
+                if ($filterVideoLink->getId() === null) {
+                    $this->addFlash($filterVideoLink->getFlashType(), $filterVideoLink->getMessage());
+                    return new RedirectResponse($request->headers->get('referer'));
+                }
+
+                $video->setVideoLink($filterVideoLink->getId());
+                $video->setTrick($trick);
                 $video->setUser($this->getUser());
             }
+
             /** @var User $user */
             $user = $this->getUser();
             $trick->setSlug($slugger->slug($trick->getName()));
@@ -135,7 +146,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Trick $trick, TrickRepository $trickRepository, SluggerInterface $slugger, IdExtractorService $idExtractorService, LoggerInterface $logger): Response
+    public function edit(Request $request, Trick $trick, TrickRepository $trickRepository, SluggerInterface $slugger, FilterYoutubeUrlService $filterVideoLink, LoggerInterface $logger): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
@@ -170,32 +181,21 @@ class TrickController extends AbstractController
                 }
             }
 
-                $videoCollectionFields = $form->get('video');
-                foreach ($videoCollectionFields as $videoField ) {
-                        $video = $videoField->getData();
-                        $videoLink = $video->getVideoLink();
+            $videoCollectionFields = $form->get('video');
+            foreach ($videoCollectionFields as $videoField) {
+                $video = $videoField->getData();
+                $videoLink = $video->getVideoLink();
 
-                        if (strlen($videoLink) !== 11){
-                            $videoLinkID = $idExtractorService->getId($videoLink);
-                            if (null == $videoLinkID){
-                                $this->addFlash('error', "the youtube url is not valid");
-                                return new RedirectResponse($request->headers->get('referer'));
-                            }
-                        } else {
-                            $regExp = "/(\\w|-|_)+/";
-                            preg_match($regExp, $videoLink, $matches);
-                            if (!$matches ) {
-                                $this->addFlash('error', "the youtube ID is not valid");
-                                return new RedirectResponse($request->headers->get('referer'));
-                            }
-                            $videoLinkID = $videoLink;
-                        }
+                $filterVideoLink->filterVideoLink($videoLink);
 
-                        $video->setVideoLink($videoLinkID);
-                        $video->setTrick($trick);
-                        $video->setUser($this->getUser());
+                if ($filterVideoLink->getId() === null) {
+                    $this->addFlash($filterVideoLink->getFlashType(), $filterVideoLink->getMessage());
+                    return new RedirectResponse($request->headers->get('referer'));
                 }
-
+                $video->setVideoLink($filterVideoLink->getId());
+                $video->setTrick($trick);
+                $video->setUser($this->getUser());
+            }
 
             $trickRepository->add($trick, true);
             $this->addFlash(
