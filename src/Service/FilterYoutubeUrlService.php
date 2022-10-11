@@ -2,72 +2,30 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
+
+use function PHPUnit\Framework\throwException;
 
 class FilterYoutubeUrlService
 {
-    private ?string $id;
-    private ?string $flashType;
-    private ?string $message;
-
-    /**
-     * @return string|null
-     */
-    public function getId(): ?string
+    public function __construct(protected IdExtractorService $idExtractorService)
     {
-        return $this->id;
     }
 
-
-    /**
-     * @return string|null
-     */
-    public function getFlashType(): ?string
+    public function filterVideoLink(string $videoLink): string
     {
-        return $this->flashType;
-    }
-
-    /**
-     * @param string|null $flashType
-     */
-
-
-    /**
-     * @return string|null
-     */
-    public function getMessage(): ?string
-    {
-        return $this->message;
-    }
-
-
-    public function filterVideoLink(string $videoLink): FilterYoutubeUrlService
-    {
-        $idExtractorService = new IdExtractorService;
-        if (strlen($videoLink) !== 11) {
-            $videoLinkID = $idExtractorService->getId($videoLink);
-            if (null === $videoLinkID) {
-                $this->id = null;
-                $this->flashType = "notice";
-                $this->message = "the youtube url is not valid";
-                return $this;
-            }
-            $this->id = $videoLinkID;
-        } else {
+        if (strlen($videoLink) === 11) {
             $regExp = "/(\\w|-|_)+/";
             preg_match($regExp, $videoLink, $matches);
             if (!$matches) {
-                $this->id = null;
-                $this->flashType = "notice";
-                $this->message = "the youtube ID is not valid";
-                return $this;
+                throw new \RuntimeException("the youtube ID is not valid");
             }
-            $this->id = $videoLink;
+            return $videoLink;
         }
-
-        $this->flashType = "success";
-        $this->message = "the youtube Link is converted";
-        return $this;
+        $videoLinkID = $this->idExtractorService->getId($videoLink);
+        if (null === $videoLinkID) {
+            throw new \RuntimeException("the youtube url is not valid");
+        }
+        return $videoLinkID;
 
     }
 }

@@ -78,14 +78,13 @@ class TrickController extends AbstractController
             foreach ($videoCollectionFields as $videoField) {
                 $video = $videoField->getData();
                 $videoLink = $video->getVideoLink();
-                $filterVideoLink->filterVideoLink($videoLink);
-
-                if ($filterVideoLink->getId() === null) {
-                    $this->addFlash($filterVideoLink->getFlashType(), $filterVideoLink->getMessage());
+                try {
+                    $video->setVideoLink($filterVideoLink->filterVideoLink($videoLink));
+                } catch (\RuntimeException $e) {
+                    $this->addFlash("error", $e->getMessage());
                     return new RedirectResponse($request->headers->get('referer'));
                 }
 
-                $video->setVideoLink($filterVideoLink->getId());
                 $video->setTrick($trick);
                 $video->setUser($this->getUser());
             }
@@ -185,15 +184,13 @@ class TrickController extends AbstractController
             foreach ($videoCollectionFields as $videoField) {
                 $video = $videoField->getData();
                 $videoLink = $video->getVideoLink();
-
-                $filterVideoLink->filterVideoLink($videoLink);
-
-                if ($filterVideoLink->getId() === null) {
-                    $this->addFlash($filterVideoLink->getFlashType(), $filterVideoLink->getMessage());
+                try {
+                    $video->setVideoLink($filterVideoLink->filterVideoLink($videoLink));
+                } catch (\RuntimeException $e) {
+                    $this->addFlash("error", $e->getMessage());
                     return new RedirectResponse($request->headers->get('referer'));
                 }
-                $video->setVideoLink($filterVideoLink->getId());
-                $video->setTrick($trick);
+
                 $video->setUser($this->getUser());
             }
 
