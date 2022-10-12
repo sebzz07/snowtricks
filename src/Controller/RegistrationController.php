@@ -42,7 +42,7 @@ class RegistrationController extends AbstractController
                 )
             );
             $user->setLinkUserPicture('default.jpg');
-
+            $user->setRoles(["ROLE_USER"]);
             $entityManager->persist($user);
             $entityManager->flush();
 
