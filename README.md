@@ -37,6 +37,8 @@ This project has been developed under php 8.1 and symfony 6.1.
 
 ```symfony console doctrine:migrations:migrate```
 
+```symfony console doctrine:migration:migrate```
+
 ```symfony console doctrine:fixtures:load```
 
 8. run local server : 
