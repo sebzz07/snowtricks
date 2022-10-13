@@ -9,6 +9,7 @@ use App\Form\PostType;
 use App\Form\TrickType;
 use App\Repository\PostRepository;
 use App\Repository\TrickRepository;
+use App\Service\FilterYoutubeUrlService;
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\NoReturn;
 use Psr\Log\LoggerInterface;
